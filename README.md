@@ -1,6 +1,6 @@
-# 🔍 Email OSINT Dashboard
+# 🔍 NexusProbe
 
-A powerful, self-hosted email intelligence platform inspired by [BehindTheEmail.com](https://behindtheemail.com). Transform any email address into a comprehensive public profile using Open Source Intelligence (OSINT).
+A powerful, self-hosted email intelligence platform. Transform any email address into a comprehensive public profile using Open Source Intelligence (OSINT).
 
 ![Stack](https://img.shields.io/badge/FastAPI-0.111-009688?style=flat-square&logo=fastapi)
 ![Stack](https://img.shields.io/badge/Python-3.11+-3776AB?style=flat-square&logo=python)
@@ -13,7 +13,7 @@ A powerful, self-hosted email intelligence platform inspired by [BehindTheEmail.
 
 | Feature | Status |
 | :--- | :---: |
-| 🔓 Data Breach Detection (HIBP) | ✅ |
+| 🔓 Data Breach Detection (XposedOrNot) | ✅ |
 | 🌐 Account Registration Check (Holehe) | ✅ |
 | 🔍 Domain WHOIS + DNS Intelligence | ✅ |
 | 👤 Gravatar Profile Discovery | ✅ |
@@ -53,9 +53,6 @@ Edit `.env`:
 # Required for DB persistence (optional for dev mode)
 SUPABASE_URL=https://your-project.supabase.co
 SUPABASE_KEY=your-anon-key
-
-# Required for breach data
-HIBP_API_KEY=your-hibp-key
 
 # Change this in production
 APP_SECRET_KEY=your-random-secret-32chars
@@ -105,7 +102,7 @@ NexusProbe/
 │   ├── services/            # OSINT modules
 │   │   ├── osint_runner.py  # Orchestrator (asyncio.gather)
 │   │   ├── holehe_service.py
-│   │   ├── hibp_service.py
+│   │   ├── xposedornot_service.py
 │   │   ├── domain_service.py
 │   │   ├── gravatar_service.py
 │   │   └── risk_scoring.py
@@ -125,7 +122,6 @@ NexusProbe/
 
 | Service | Required | Free? | Link |
 | :--- | :---: | :---: | :--- |
-| Have I Been Pwned | Optional | ❌ ($3.50/mo) | [haveibeenpwned.com/API/Key](https://haveibeenpwned.com/API/Key) |
 | Supabase | Optional | ✅ | [supabase.com](https://supabase.com) |
 
 ---

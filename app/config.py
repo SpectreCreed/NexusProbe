@@ -27,12 +27,6 @@ class Settings(BaseSettings):
     # Proxy (optional for scraping)
     http_proxy: Optional[str] = None
 
-    # HIBP
-    hibp_api_key: Optional[str] = None
-
-    @property
-    def has_hibp(self) -> bool:
-        return bool(self.hibp_api_key)
 
     @property
     def has_supabase(self) -> bool:

@@ -138,7 +138,7 @@ class _LoadingView extends StatelessWidget {
                 alignment: WrapAlignment.center,
                 children: const [
                   _ModuleChip('Holehe', Icons.people_outlined),
-                  _ModuleChip('HIBP', Icons.security_outlined),
+                  _ModuleChip('Breaches', Icons.security_outlined),
                   _ModuleChip('Gravatar', Icons.face_outlined),
                   _ModuleChip('Domain', Icons.dns_outlined),
                   _ModuleChip('Risk Score', Icons.analytics_outlined),

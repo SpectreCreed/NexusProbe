@@ -19,17 +19,16 @@ from app.routes import bulk
 async def lifespan(app: FastAPI):
     """Startup / shutdown lifecycle."""
     print("=" * 60)
-    print("  Email OSINT Dashboard")
+    print("  NexusProbe")
     print("=" * 60)
     print(f"  Supabase:  {'[OK] Connected' if settings.has_supabase else '[--] Not configured (in-memory mode)'}")
-    print(f"  HIBP:      {'[OK] API Key set' if settings.has_hibp else '[--] No key (breach data disabled)'}")
     print(f"  Debug:     {settings.app_debug}")
     print("=" * 60)
     yield
 
 
 app = FastAPI(
-    title="Email OSINT Dashboard",
+    title="NexusProbe",
     description="Open Source Intelligence platform for email address investigation.",
     version="1.0.0",
     lifespan=lifespan,
