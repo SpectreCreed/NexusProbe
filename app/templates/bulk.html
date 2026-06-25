@@ -1,0 +1,290 @@
+{% extends "base.html" %}
+
+{% block title %}Bulk Email Scan — OSINT Dashboard{% endblock %}
+{% block description %}Upload a CSV of email addresses and run batch OSINT investigations simultaneously.{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+
+  <!-- Page Header -->
+  <div class="mb-8 fade-in">
+    <div class="flex items-center gap-3 mb-2">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-600 flex items-center justify-center shadow-lg shadow-violet-500/25">
+        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+        </svg>
+      </div>
+      <div>
+        <h1 class="text-2xl font-bold text-slate-100">Bulk Email Scan</h1>
+        <p class="text-slate-500 text-sm">Upload a CSV to investigate up to 25 email addresses simultaneously</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Upload Zone (shown when no batch is active) -->
+  <div id="upload-zone" class="{% if batch_id %}hidden{% endif %}">
+    <div class="glass-card p-8 fade-in-delay-1"
+         x-data="{
+           dragging: false,
+           uploading: false,
+           error: null,
+           handleDrop(e) {
+             this.dragging = false;
+             const file = e.dataTransfer.files[0];
+             if (file) this.uploadFile(file);
+           },
+           handleInput(e) {
+             const file = e.target.files[0];
+             if (file) this.uploadFile(file);
+           },
+           async uploadFile(file) {
+             if (!file.name.endsWith('.csv')) {
+               this.error = 'Please upload a .csv file.';
+               return;
+             }
+             this.uploading = true;
+             this.error = null;
+             const fd = new FormData();
+             fd.append('file', file);
+             try {
+               const resp = await fetch('/bulk/upload', { method: 'POST', body: fd });
+               const data = await resp.json();
+               if (!resp.ok) {
+                 this.error = data.detail || 'Upload failed.';
+                 this.uploading = false;
+                 return;
+               }
+               // Transition to results view
+               window._batchId = data.batch_id;
+               window._batchEmails = data.emails;
+               document.getElementById('upload-zone').classList.add('hidden');
+               document.getElementById('results-zone').classList.remove('hidden');
+               startPolling(data.batch_id);
+             } catch(err) {
+               this.error = 'Network error. Is the server running?';
+               this.uploading = false;
+             }
+           }
+         }">
+
+      <!-- Drop area -->
+      <div
+        @dragover.prevent="dragging = true"
+        @dragleave.prevent="dragging = false"
+        @drop.prevent="handleDrop($event)"
+        :class="dragging ? 'border-violet-400 bg-violet-500/10' : 'border-slate-700 hover:border-slate-600'"
+        class="border-2 border-dashed rounded-2xl p-12 text-center transition-all duration-200 cursor-pointer"
+        @click="$refs.fileInput.click()">
+
+        <input type="file" accept=".csv" x-ref="fileInput" @change="handleInput($event)" class="hidden" />
+
+        <template x-if="!uploading">
+          <div>
+            <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-violet-500/15 flex items-center justify-center">
+              <svg class="w-8 h-8 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+              </svg>
+            </div>
+            <p class="text-slate-200 font-semibold text-lg mb-1">Drop your CSV here</p>
+            <p class="text-slate-500 text-sm">or <span class="text-violet-400 underline underline-offset-2">click to browse</span></p>
+            <p class="text-slate-600 text-xs mt-3">Max 25 emails per batch • UTF-8 encoded CSV</p>
+          </div>
+        </template>
+
+        <template x-if="uploading">
+          <div class="flex flex-col items-center gap-3">
+            <div class="w-10 h-10 border-2 border-violet-500 border-t-transparent rounded-full animate-spin"></div>
+            <p class="text-slate-300 font-medium">Uploading & starting scans…</p>
+          </div>
+        </template>
+      </div>
+
+      <!-- Error message -->
+      <template x-if="error">
+        <div class="mt-4 rounded-xl bg-red-500/10 border border-red-500/20 px-4 py-3 text-sm text-red-400 flex items-center gap-2">
+          <span>⚠️</span>
+          <span x-text="error"></span>
+        </div>
+      </template>
+
+      <!-- CSV format hint -->
+      <div class="mt-6 p-4 rounded-xl bg-slate-900/50 border border-slate-800">
+        <p class="text-slate-500 text-xs font-semibold mb-2 uppercase tracking-wider">CSV Format</p>
+        <pre class="mono text-slate-400 text-xs">email
+alice@example.com
+bob@company.org
+carol@domain.net</pre>
+        <p class="text-slate-600 text-xs mt-2">Emails can be in any column — we'll find them automatically.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Results Zone (shown after upload or when batch_id is set) -->
+  <div id="results-zone" class="{% if not batch_id %}hidden{% endif %} fade-in">
+
+    <!-- Stats bar -->
+    <div id="batch-stats" class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+      <div class="glass-card p-4 text-center">
+        <p id="stat-total" class="text-2xl font-black text-slate-100">—</p>
+        <p class="text-slate-500 text-xs">Total</p>
+      </div>
+      <div class="glass-card p-4 text-center">
+        <p id="stat-completed" class="text-2xl font-black text-emerald-400">0</p>
+        <p class="text-slate-500 text-xs">Completed</p>
+      </div>
+      <div class="glass-card p-4 text-center">
+        <p id="stat-processing" class="text-2xl font-black text-amber-400">—</p>
+        <p class="text-slate-500 text-xs">Processing</p>
+      </div>
+      <div class="glass-card p-4 text-center">
+        <p id="stat-failed" class="text-2xl font-black text-red-400">0</p>
+        <p class="text-slate-500 text-xs">Failed</p>
+      </div>
+    </div>
+
+    <!-- Progress bar -->
+    <div class="glass-card p-5 mb-6">
+      <div class="flex items-center justify-between mb-3">
+        <p class="text-sm font-semibold text-slate-300">Batch Progress</p>
+        <div class="flex items-center gap-3">
+          <span id="progress-pct" class="text-sm font-bold text-violet-400">0%</span>
+          <span id="batch-status-badge" class="badge badge-amber">Processing</span>
+        </div>
+      </div>
+      <div class="h-2 bg-slate-800 rounded-full overflow-hidden">
+        <div id="progress-bar" class="h-full bg-gradient-to-r from-violet-500 to-fuchsia-500 rounded-full transition-all duration-500" style="width: 0%"></div>
+      </div>
+    </div>
+
+    <!-- Results table -->
+    <div class="glass-card overflow-hidden mb-6">
+      <div class="flex items-center justify-between px-6 py-4 border-b border-slate-800">
+        <h2 class="font-semibold text-slate-200">Email Results</h2>
+        <a id="download-report-btn" href="#" class="btn-secondary text-xs hidden">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+          </svg>
+          Download Report
+        </a>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="text-xs text-slate-500 uppercase tracking-wider border-b border-slate-800">
+              <th class="px-6 py-3 text-left">Email</th>
+              <th class="px-6 py-3 text-left">Status</th>
+              <th class="px-6 py-3 text-left">Risk Score</th>
+              <th class="px-6 py-3 text-left">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="results-tbody" class="divide-y divide-slate-800/60">
+            <!-- Populated by JS polling -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- New batch button -->
+    <div class="text-center">
+      <button onclick="resetBulk()" class="btn-ghost text-sm">← Upload Another CSV</button>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  const RISK_COLORS = { Low: 'emerald', Medium: 'amber', High: 'orange', Critical: 'red' };
+  let _pollInterval = null;
+
+  {% if batch_id %}
+  // Page loaded with existing batch_id — start polling immediately
+  window._batchId = '{{ batch_id }}';
+  document.getElementById('results-zone').classList.remove('hidden');
+  startPolling('{{ batch_id }}');
+  {% endif %}
+
+  function startPolling(batchId) {
+    // Poll immediately, then every 4 seconds
+    pollBatch(batchId);
+    _pollInterval = setInterval(() => pollBatch(batchId), 4000);
+  }
+
+  async function pollBatch(batchId) {
+    try {
+      const resp = await fetch(`/bulk/${batchId}/status`);
+      if (!resp.ok) return;
+      const data = await resp.json();
+      updateUI(data, batchId);
+
+      if (data.status === 'completed') {
+        clearInterval(_pollInterval);
+        _pollInterval = null;
+        // Show download button
+        const dlBtn = document.getElementById('download-report-btn');
+        dlBtn.href = `/bulk/${batchId}/report`;
+        dlBtn.classList.remove('hidden');
+        document.getElementById('batch-status-badge').textContent = 'Completed';
+        document.getElementById('batch-status-badge').className = 'badge badge-found';
+      }
+    } catch(e) { /* ignore transient errors */ }
+  }
+
+  function updateUI(data, batchId) {
+    const total = data.total || 0;
+    const processing = total - data.completed - data.failed;
+
+    document.getElementById('stat-total').textContent = total;
+    document.getElementById('stat-completed').textContent = data.completed;
+    document.getElementById('stat-processing').textContent = processing;
+    document.getElementById('stat-failed').textContent = data.failed;
+
+    const pct = data.progress_pct || 0;
+    document.getElementById('progress-bar').style.width = pct + '%';
+    document.getElementById('progress-pct').textContent = pct + '%';
+
+    const tbody = document.getElementById('results-tbody');
+    tbody.innerHTML = '';
+
+    for (const s of data.searches) {
+      const tr = document.createElement('tr');
+      tr.className = 'hover:bg-white/2 transition-colors';
+
+      const statusBadge = s.status === 'completed'
+        ? '<span class="badge badge-found">Done</span>'
+        : s.status === 'failed'
+        ? '<span class="badge badge-not-found">Failed</span>'
+        : '<span class="badge badge-amber flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse inline-block"></span>Scanning</span>';
+
+      const riskBadge = s.risk
+        ? `<span class="badge risk-badge-${RISK_COLORS[s.risk.label] || 'slate'}">${s.risk.score}/100 ${s.risk.label}</span>`
+        : '<span class="text-slate-600 text-xs">—</span>';
+
+      const action = s.status === 'completed'
+        ? `<a href="/search/${s.search_id}" target="_blank" class="text-indigo-400 hover:text-indigo-300 text-xs font-medium transition-colors">View Report →</a>`
+        : '<span class="text-slate-700 text-xs">—</span>';
+
+      tr.innerHTML = `
+        <td class="px-6 py-3 mono text-slate-300 text-xs">${s.email}</td>
+        <td class="px-6 py-3">${statusBadge}</td>
+        <td class="px-6 py-3">${riskBadge}</td>
+        <td class="px-6 py-3">${action}</td>
+      `;
+      tbody.appendChild(tr);
+    }
+  }
+
+  function resetBulk() {
+    if (_pollInterval) clearInterval(_pollInterval);
+    document.getElementById('upload-zone').classList.remove('hidden');
+    document.getElementById('results-zone').classList.add('hidden');
+    document.getElementById('results-tbody').innerHTML = '';
+    document.getElementById('progress-bar').style.width = '0%';
+    document.getElementById('progress-pct').textContent = '0%';
+    document.getElementById('batch-status-badge').textContent = 'Processing';
+    document.getElementById('batch-status-badge').className = 'badge badge-amber';
+    document.getElementById('download-report-btn').classList.add('hidden');
+  }
+</script>
+{% endblock %}

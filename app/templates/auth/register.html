@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Create Account — Email OSINT Dashboard{% endblock %}
+
+{% block content %}
+<div class="min-h-[75vh] flex items-center justify-center">
+  <div class="w-full max-w-md fade-in">
+
+    <div class="text-center mb-8">
+      <div class="w-14 h-14 mx-auto rounded-2xl bg-gradient-to-br from-emerald-500 to-cyan-600 flex items-center justify-center shadow-xl shadow-emerald-500/25 mb-4">
+        <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
+        </svg>
+      </div>
+      <h1 class="text-2xl font-black text-slate-100">Create account</h1>
+      <p class="text-slate-500 text-sm mt-1">Save searches and track your investigations</p>
+      {% if not supabase_configured %}
+      <div class="mt-3 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs">
+        ⚠️ Dev mode — registration creates a session cookie
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="glass-card p-8">
+      {% if error %}
+      <div class="mb-5 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm flex items-center gap-2">
+        <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        {{ error }}
+      </div>
+      {% endif %}
+
+      <form method="POST" action="/auth/register" class="space-y-5">
+        <div>
+          <label class="block text-sm font-medium text-slate-400 mb-2">Email</label>
+          <input type="email" name="email" id="reg-email" required
+                 placeholder="you@example.com"
+                 class="search-input text-base py-3" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-slate-400 mb-2">Password</label>
+          <input type="password" name="password" id="reg-password" required
+                 placeholder="Minimum 8 characters"
+                 minlength="8"
+                 class="search-input text-base py-3" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-slate-400 mb-2">Confirm Password</label>
+          <input type="password" name="confirm_password" id="reg-confirm" required
+                 placeholder="••••••••"
+                 class="search-input text-base py-3" />
+        </div>
+
+        <button type="submit" class="btn-primary w-full" style="background: linear-gradient(135deg, #10b981, #06b6d4);">
+          <span>Create Account</span>
+        </button>
+      </form>
+
+      <p class="text-center text-slate-500 text-sm mt-6">
+        Already have an account?
+        <a href="/auth/login" class="text-indigo-400 hover:text-indigo-300 font-medium transition-colors">Sign in →</a>
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,52 @@
+<!-- HTMX Partial: Status/Loading Banner -->
+<!-- This is returned immediately after form submission and polls until complete -->
+<div
+  id="status-poll"
+  {% if status in ('pending', 'processing') %}
+  hx-get="/search/{{ search_id }}/status"
+  hx-trigger="every 3s"
+  hx-target="#status-poll"
+  hx-swap="outerHTML"
+  {% endif %}
+  class="glass-card p-6 text-center fade-in"
+>
+  {% if status in ('pending', 'processing') %}
+  <!-- Running state -->
+  <div class="flex flex-col items-center gap-4">
+    <div class="relative">
+      <div class="w-16 h-16 rounded-full border-2 border-indigo-500/20 flex items-center justify-center">
+        <svg class="animate-spin w-8 h-8 text-indigo-400" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"/>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
+        </svg>
+      </div>
+      <div class="absolute -top-1 -right-1 pulse-dot"></div>
+    </div>
+
+    <div>
+      <p class="text-slate-200 font-semibold">Scanning <span class="gradient-text mono">{{ email }}</span></p>
+      <p class="text-slate-500 text-sm mt-1">Running OSINT modules concurrently — this may take 20–60 seconds</p>
+    </div>
+
+    <!-- Module progress indicators -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 w-full max-w-lg mt-2">
+      {% for module, icon in [('Holehe', '🌐'), ('HIBP', '🔓'), ('WHOIS/DNS', '🔍'), ('Gravatar', '👤')] %}
+      <div class="glass-card-sm p-3 flex flex-col items-center gap-1 text-center">
+        <span class="text-xl">{{ icon }}</span>
+        <span class="text-slate-400 text-xs">{{ module }}</span>
+        <div class="skeleton w-12 h-1.5 rounded-full mt-1"></div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  {% elif status == 'failed' %}
+  <!-- Error state -->
+  <div class="flex flex-col items-center gap-3">
+    <div class="w-14 h-14 rounded-full bg-red-500/10 flex items-center justify-center text-3xl">❌</div>
+    <p class="text-red-400 font-semibold">Scan Failed</p>
+    <p class="text-slate-500 text-sm">There was an error running the OSINT scan. Please try again.</p>
+    <a href="/" class="btn-secondary mt-2">← Back to Search</a>
+  </div>
+  {% endif %}
+</div>

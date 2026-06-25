@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}Search History — Email OSINT Dashboard{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+
+  <div class="flex items-center justify-between mb-6">
+    <div>
+      <h1 class="text-2xl font-bold text-slate-100">Search History</h1>
+      <p class="text-slate-500 text-sm mt-1">All past OSINT investigations</p>
+    </div>
+    <a href="/" class="btn-secondary">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+      </svg>
+      New Search
+    </a>
+  </div>
+
+  {% if searches %}
+  <div class="glass-card overflow-hidden fade-in">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Email Address</th>
+          <th>Status</th>
+          <th>Date</th>
+          <th class="text-right">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for search in searches %}
+        <tr class="group">
+          <td>
+            <span class="mono text-slate-200 text-sm">{{ search.email }}</span>
+          </td>
+          <td>
+            {% if search.status == 'completed' %}
+              <span class="badge badge-found">✓ Completed</span>
+            {% elif search.status == 'processing' %}
+              <span class="badge" style="background:rgba(99,102,241,0.12);color:#818cf8;border:1px solid rgba(99,102,241,0.25);">
+                <svg class="animate-spin w-3 h-3" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
+                </svg>
+                Running
+              </span>
+            {% elif search.status == 'failed' %}
+              <span class="badge badge-breach">✗ Failed</span>
+            {% else %}
+              <span class="badge badge-not-found">Pending</span>
+            {% endif %}
+          </td>
+          <td class="text-slate-500 text-xs">
+            {{ search.created_at[:16].replace('T',' ') if search.created_at else '—' }}
+          </td>
+          <td class="text-right">
+            <div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+              <a href="/search/{{ search.id }}" class="btn-ghost py-1 px-3 text-xs">View</a>
+              {% if search.status == 'completed' %}
+              <a href="/export/{{ search.id }}/json" class="btn-ghost py-1 px-3 text-xs">JSON</a>
+              <a href="/export/{{ search.id }}/pdf" class="btn-ghost py-1 px-3 text-xs">PDF</a>
+              {% endif %}
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% else %}
+  <div class="glass-card p-16 text-center fade-in">
+    <div class="text-5xl mb-4">🔍</div>
+    <h2 class="text-lg font-semibold text-slate-300 mb-2">No searches yet</h2>
+    <p class="text-slate-500 text-sm mb-6">Start investigating an email address to see history here.</p>
+    <a href="/" class="btn-primary">
+      <span>Start Investigating</span>
+    </a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

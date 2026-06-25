@@ -1,0 +1,70 @@
+name: email_osint_app
+description: Email OSINT Android App — Investigate email addresses with full OSINT profiles.
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # State management
+  flutter_riverpod: ^2.5.1
+  riverpod_annotation: ^2.3.5
+
+  # HTTP client
+  dio: ^5.4.3+1
+
+  # Supabase auth
+  supabase_flutter: ^2.5.2
+
+  # Charts (risk gauge, timeline)
+  fl_chart: ^0.68.0
+
+  # File operations
+  file_picker: ^8.0.7
+  share_plus: ^9.0.0
+  path_provider: ^2.1.3
+
+  # Local storage
+  hive_flutter: ^1.1.0
+  flutter_secure_storage: ^9.2.2
+
+  # URL launcher (open social links)
+  url_launcher: ^6.3.0
+
+  # Routing
+  go_router: ^14.2.0
+
+  # Animations
+  flutter_animate: ^4.5.0
+
+  # Typography
+  google_fonts: ^6.2.1
+
+  # Icons
+  cupertino_icons: ^1.0.8
+
+  # Permissions
+  permission_handler: ^11.3.1
+
+  # Misc
+  intl: ^0.19.0
+  cached_network_image: ^3.3.1
+  shared_preferences: ^2.3.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+  build_runner: ^2.4.9
+  riverpod_generator: ^2.4.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
+    - assets/icons/
+    - .env

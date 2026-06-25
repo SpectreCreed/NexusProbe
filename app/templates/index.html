@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+
+{% block title %}Email OSINT Dashboard — Investigate Any Email Address{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="relative flex flex-col items-center justify-center min-h-[70vh] text-center py-16 overflow-hidden">
+
+  <!-- Ambient glows -->
+  <div class="hero-glow top-0 left-1/2 -translate-x-1/2 -translate-y-1/4 opacity-60 pointer-events-none absolute"></div>
+  <div class="absolute top-1/3 left-1/4 w-80 h-80 rounded-full bg-violet-600/5 blur-3xl pointer-events-none"></div>
+  <div class="absolute top-1/3 right-1/4 w-80 h-80 rounded-full bg-cyan-600/5 blur-3xl pointer-events-none"></div>
+
+  <!-- Badge -->
+  <div class="fade-in inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-500/10 border border-indigo-500/25 text-indigo-400 text-sm font-medium mb-6">
+    <span class="w-2 h-2 rounded-full bg-indigo-400 animate-pulse"></span>
+    Open Source Intelligence Platform
+  </div>
+
+  <!-- Headline -->
+  <h1 class="fade-in-delay-1 text-5xl md:text-7xl font-black leading-tight tracking-tight mb-4">
+    <span class="text-slate-100">Uncover</span><br/>
+    <span class="gradient-text">Digital Footprints</span>
+  </h1>
+
+  <p class="fade-in-delay-2 text-slate-400 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
+    Transform any email address into a comprehensive intelligence profile.
+    Discover breaches, registered accounts, domain intelligence, and social footprints.
+  </p>
+
+  <!-- Search Box -->
+  <div class="fade-in-delay-3 w-full max-w-2xl mx-auto relative z-10">
+    <form
+      hx-post="/search"
+      hx-target="#search-output"
+      hx-swap="innerHTML"
+      hx-indicator="#search-spinner"
+      class="flex flex-col sm:flex-row gap-3"
+      x-data="{ email: '' }"
+    >
+      <div class="flex-1 relative">
+        <div class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+          </svg>
+        </div>
+        <input
+          type="email"
+          name="email"
+          id="email-input"
+          x-model="email"
+          placeholder="target@example.com"
+          class="search-input pl-12"
+          required
+          autocomplete="off"
+          spellcheck="false"
+        />
+      </div>
+      <button
+        type="submit"
+        id="search-btn"
+        class="btn-primary flex items-center justify-center gap-2 min-w-36"
+        :disabled="!email"
+      >
+        <span class="loading-hide flex items-center gap-2">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+          <span>Investigate</span>
+        </span>
+        <span id="search-spinner" class="htmx-indicator">
+          <svg class="animate-spin w-5 h-5 text-white" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
+          </svg>
+        </span>
+      </button>
+    </form>
+
+    <p class="text-slate-600 text-xs mt-3">
+      By using this tool you agree to use it for ethical, legal purposes only.
+    </p>
+  </div>
+
+  <!-- Search Output (HTMX target) -->
+  <div id="search-output" class="w-full max-w-2xl mx-auto mt-6"></div>
+</section>
+
+<!-- Feature Cards -->
+<section class="max-w-5xl mx-auto py-8 fade-in">
+  <hr class="gradient-divider mb-12" />
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+    <!-- Breaches -->
+    <div class="glass-card p-5 group">
+      <div class="w-10 h-10 rounded-xl bg-red-500/15 flex items-center justify-center mb-4 text-red-400 group-hover:bg-red-500/25 transition-colors text-lg">🔓</div>
+      <h3 class="font-semibold text-slate-200 mb-1">Data Breaches</h3>
+      <p class="text-slate-500 text-sm">HIBP integration to surface known breach exposures with dates and data types.</p>
+    </div>
+    <!-- Accounts -->
+    <div class="glass-card p-5 group">
+      <div class="w-10 h-10 rounded-xl bg-indigo-500/15 flex items-center justify-center mb-4 text-indigo-400 group-hover:bg-indigo-500/25 transition-colors text-lg">🌐</div>
+      <h3 class="font-semibold text-slate-200 mb-1">Registered Accounts</h3>
+      <p class="text-slate-500 text-sm">Holehe checks 100+ web services for active registrations using the email.</p>
+    </div>
+    <!-- Domain -->
+    <div class="glass-card p-5 group">
+      <div class="w-10 h-10 rounded-xl bg-cyan-500/15 flex items-center justify-center mb-4 text-cyan-400 group-hover:bg-cyan-500/25 transition-colors text-lg">🔍</div>
+      <h3 class="font-semibold text-slate-200 mb-1">Domain Intelligence</h3>
+      <p class="text-slate-500 text-sm">WHOIS registration data, MX records, SPF and DMARC email security analysis.</p>
+    </div>
+    <!-- Risk -->
+    <div class="glass-card p-5 group">
+      <div class="w-10 h-10 rounded-xl bg-amber-500/15 flex items-center justify-center mb-4 text-amber-400 group-hover:bg-amber-500/25 transition-colors text-lg">⚠️</div>
+      <h3 class="font-semibold text-slate-200 mb-1">Risk Scoring</h3>
+      <p class="text-slate-500 text-sm">Automated 0–100 exposure score with breakdown by breach, accounts, and profile.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Recent Searches -->
+{% if recent_searches %}
+<section class="max-w-5xl mx-auto py-6">
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-slate-400 text-sm font-semibold uppercase tracking-wider">Recent Searches</h2>
+    <a href="/history" class="text-indigo-400 text-xs hover:text-indigo-300 transition-colors">View all →</a>
+  </div>
+  <div class="glass-card overflow-hidden">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Email</th>
+          <th>Status</th>
+          <th>Time</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for search in recent_searches %}
+        <tr>
+          <td class="mono text-slate-300">{{ search.email }}</td>
+          <td>
+            {% if search.status == 'completed' %}
+              <span class="badge badge-found">✓ Complete</span>
+            {% elif search.status == 'processing' %}
+              <span class="badge" style="background:rgba(99,102,241,0.12);color:#818cf8;border:1px solid rgba(99,102,241,0.25);">⟳ Running</span>
+            {% elif search.status == 'failed' %}
+              <span class="badge badge-breach">✗ Failed</span>
+            {% else %}
+              <span class="badge badge-not-found">Pending</span>
+            {% endif %}
+          </td>
+          <td class="text-slate-600 text-xs">{{ search.created_at[:16].replace('T', ' ') if search.created_at else '—' }}</td>
+          <td>
+            <a href="/search/{{ search.id }}" class="btn-ghost text-xs py-1 px-3">View</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endif %}
+
+{% endblock %}

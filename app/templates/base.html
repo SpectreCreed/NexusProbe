@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Email OSINT Dashboard{% endblock %}</title>
+  <meta name="description" content="{% block description %}Open Source Intelligence platform for email address investigation. Discover breaches, registered accounts, and domain intelligence.{% endblock %}" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            slate: {
+              950: '#020617',
+              925: '#070f1f',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/static/css/app.css?v=2.0" />
+
+  <!-- HTMX -->
+  <script src="https://unpkg.com/htmx.org@1.9.12" defer></script>
+
+  <!-- Alpine.js -->
+  <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
+  <!-- ApexCharts -->
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.49.0/dist/apexcharts.min.js" defer></script>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js" defer></script>
+
+  <!-- D3.js v7 (connection graph) -->
+  <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js" defer></script>
+
+  <!-- App JS -->
+  <script src="/static/js/app.js" defer></script>
+
+  {% block head %}{% endblock %}
+</head>
+<body class="bg-slate-950 text-slate-100 bg-grid">
+
+  <!-- Navigation -->
+  <nav class="navbar px-4 py-3">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <!-- Logo -->
+      <a href="/" class="flex items-center gap-3 group">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center shadow-lg shadow-indigo-500/25 group-hover:shadow-indigo-500/40 transition-all">
+          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/>
+          </svg>
+        </div>
+        <div>
+          <span class="font-bold text-slate-100 text-sm leading-none block">Email OSINT</span>
+          <span class="text-slate-500 text-xs">Intelligence Dashboard</span>
+        </div>
+      </a>
+
+      <!-- Nav links -->
+      <div class="hidden md:flex items-center gap-1">
+        <a href="/" class="px-3 py-2 text-sm text-slate-400 hover:text-slate-100 hover:bg-white/5 rounded-lg transition-all">Search</a>
+        <a href="/bulk" class="px-3 py-2 text-sm text-slate-400 hover:text-slate-100 hover:bg-white/5 rounded-lg transition-all">Bulk Scan</a>
+        <a href="/history" class="px-3 py-2 text-sm text-slate-400 hover:text-slate-100 hover:bg-white/5 rounded-lg transition-all">History</a>
+      </div>
+
+      <!-- Right side -->
+      <div class="flex items-center gap-2">
+        {% if request.cookies.get('user_email') %}
+        <div x-data="{ open: false }" class="relative">
+          <button @click="open = !open" class="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-white/5 transition-all text-sm text-slate-300">
+            <div class="w-7 h-7 rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-xs font-bold text-white">
+              {{ request.cookies.get('user_email', 'U')[0].upper() }}
+            </div>
+            <span class="hidden sm:block max-w-32 truncate">{{ request.cookies.get('user_email') }}</span>
+            <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </button>
+          <div x-show="open" @click.outside="open = false" x-transition
+               class="absolute right-0 mt-2 w-40 glass-card py-1 z-50">
+            <a href="/history" class="block px-4 py-2 text-sm text-slate-300 hover:text-white hover:bg-white/5">History</a>
+            <hr class="border-slate-800 my-1" />
+            <a href="/auth/logout" class="block px-4 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-white/5">Sign Out</a>
+          </div>
+        </div>
+        {% else %}
+        <a href="/auth/login" class="btn-ghost text-xs">Sign In</a>
+        <a href="/auth/register" class="btn-secondary text-xs">Get Started</a>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="max-w-7xl mx-auto px-4 py-8">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Toast notification -->
+  <div id="copy-toast" class="fixed bottom-6 right-6 z-50 opacity-0 transition-opacity duration-300
+       bg-slate-800 border border-slate-700 text-slate-200 text-sm px-4 py-3 rounded-xl shadow-xl flex items-center gap-2">
+    <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+    </svg>
+    Copied to clipboard!
+  </div>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-900 mt-16 py-8">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <p class="text-slate-600 text-xs">Email OSINT Dashboard v1.0 — For educational and legitimate investigative purposes only.</p>
+      <div class="flex items-center gap-4">
+        <span class="text-slate-700 text-xs">Ethical OSINT</span>
+        <span class="w-1 h-1 bg-slate-700 rounded-full"></span>
+        <span class="text-slate-700 text-xs">Public Data Only</span>
+      </div>
+    </div>
+  </footer>
+
+  {% block scripts %}{% endblock %}
+</body>
+</html>
