@@ -84,9 +84,9 @@ async def search_status(request: Request, search_id: str):
             "message": record.get("error_message") or "OSINT scan failed. Please try again.",
         })
 
-    # Completed — redirect to full dashboard
-    from fastapi.responses import RedirectResponse
-    return RedirectResponse(url=f"/search/{search_id}", status_code=303)
+    # Completed — redirect to full dashboard via HTMX header
+    from fastapi import Response
+    return Response(headers={"HX-Redirect": f"/search/{search_id}"})
 
 
 @router.get("/search/{search_id}", response_class=HTMLResponse)

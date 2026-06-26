@@ -224,14 +224,20 @@ function initConnectionGraph(nodes, links) {
     .attr('d', 'M0,-4L8,0L0,4')
     .attr('fill', 'rgba(99,102,241,0.4)');
 
-  // Force simulation
+  // Force simulation (responsive force constants)
+  const isMobile = W < 500;
+  const centralDistance = isMobile ? 65 : 100;
+  const leafDistance = isMobile ? 45 : 60;
+  const chargeStrength = isMobile ? -80 : -180;
+  const collideRadius = isMobile ? 4 : 8;
+
   const simulation = d3.forceSimulation(nodes)
     .force('link', d3.forceLink(links).id(d => d.id).distance(d => {
-      return d.source.type === 'email' ? 100 : 60;
+      return d.source.type === 'email' ? centralDistance : leafDistance;
     }))
-    .force('charge', d3.forceManyBody().strength(-180))
+    .force('charge', d3.forceManyBody().strength(chargeStrength))
     .force('center', d3.forceCenter(W / 2, H / 2))
-    .force('collision', d3.forceCollide().radius(d => (nodeRadius[d.type] || 10) + 8));
+    .force('collision', d3.forceCollide().radius(d => (nodeRadius[d.type] || 10) + collideRadius));
 
   // Links
   const link = zoomG.append('g')

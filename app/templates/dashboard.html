@@ -845,6 +845,7 @@
 {% set found_accounts = accounts | selectattr('exists') | list %}
 
 <script>
+document.addEventListener('DOMContentLoaded', () => {
   {% if risk %}
   initRiskGauge({{ risk.get('score', 0) }}, '{{ risk.get('color', 'emerald') }}');
   {% endif %}
@@ -897,6 +898,7 @@
   if (graphNodes.length > 1) {
     initConnectionGraph(graphNodes, graphLinks);
   }
+});
 </script>
 {% endif %}
 {% endblock %}
