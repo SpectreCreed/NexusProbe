@@ -22,6 +22,7 @@ async def lifespan(app: FastAPI):
     print("  NexusProbe")
     print("=" * 60)
     print(f"  Supabase:  {'[OK] Connected' if settings.has_supabase else '[--] Not configured (in-memory mode)'}")
+    print(f"  GitHub:    {'[OK] Token configured' if settings.has_github else '[--] No token configured'}")
     print(f"  Debug:     {settings.app_debug}")
     print("=" * 60)
     yield

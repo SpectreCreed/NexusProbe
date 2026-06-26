@@ -21,8 +21,10 @@ class Settings(BaseSettings):
     app_host: str = "0.0.0.0"
     app_port: int = 8000
 
-    # GitHub (optional — raises rate limit from 60 to 5000 req/hr)
+    # GitHub (optional - raises rate limit from 60 to 5000 req/hr)
     github_token: Optional[str] = None
+    github_access_token: Optional[str] = None
+    gh_token: Optional[str] = None
 
     # Proxy (optional for scraping)
     http_proxy: Optional[str] = None
@@ -35,8 +37,16 @@ class Settings(BaseSettings):
 
 
     @property
+    def github_auth_token(self) -> Optional[str]:
+        """Return the first configured GitHub token env var."""
+        for token in (self.github_token, self.github_access_token, self.gh_token):
+            if token and token.strip():
+                return token.strip()
+        return None
+
+    @property
     def has_github(self) -> bool:
-        return bool(self.github_token)
+        return bool(self.github_auth_token)
 
 
 settings = Settings()

@@ -11,9 +11,6 @@ Rate limits:
   Set GITHUB_TOKEN in .env to raise limits.
 """
 from __future__ import annotations
-import asyncio
-from typing import Optional
-
 import httpx
 
 from app.config import settings
@@ -30,8 +27,9 @@ def _headers() -> dict:
         "X-GitHub-Api-Version": "2022-11-28",
         "User-Agent": "EmailOSINT/2.0",
     }
-    if settings.has_github:
-        h["Authorization"] = f"Bearer {settings.github_token}"
+    token = settings.github_auth_token
+    if token:
+        h["Authorization"] = f"Bearer {token}"
     return h
 
 

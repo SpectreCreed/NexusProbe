@@ -1,14 +1,17 @@
 """
-Holehe service — checks which web services have an account associated with the email.
-Calls Holehe via Python import (async wrapper around its synchronous execution).
-Falls back to subprocess if import fails.
+Holehe service - checks which web services have an account associated with the email.
+Runs Holehe in a worker thread because the CLI is synchronous.
 """
 from __future__ import annotations
+
 import asyncio
 import json
+import os
+import shutil
 import subprocess
 import sys
 from typing import List
+
 from app.models import AccountEntry
 
 # Category mapping for known services
@@ -34,6 +37,23 @@ def _get_category(service_name: str) -> str:
     return SERVICE_CATEGORIES.get(service_name.lower(), "other")
 
 
+def _holehe_base_command() -> List[str]:
+    """Resolve Holehe without relying on a user-specific Windows path."""
+    configured = os.environ.get("HOLEHE_BIN")
+    if configured:
+        return [configured]
+
+    executable = shutil.which("holehe") or shutil.which("holehe.exe")
+    if executable:
+        return [executable]
+
+    return [
+        sys.executable, 
+        "-c", 
+        "import sys; from holehe.core import main; sys.exit(main())"
+    ]
+
+
 async def check_accounts(email: str) -> List[AccountEntry]:
     """Check account registrations via Holehe."""
     loop = asyncio.get_event_loop()
@@ -43,9 +63,10 @@ async def check_accounts(email: str) -> List[AccountEntry]:
 
 def _run_holehe_subprocess(email: str) -> List[AccountEntry]:
     """Run holehe via subprocess and parse its JSON output."""
+    command = [*_holehe_base_command(), email, "--only-used", "--json"]
     try:
         result = subprocess.run(
-            [r"C:\Users\chinm\AppData\Roaming\Python\Python313\Scripts\holehe.exe", email, "--only-used", "--json"],
+            command,
             capture_output=True,
             text=True,
             timeout=120,
@@ -54,7 +75,6 @@ def _run_holehe_subprocess(email: str) -> List[AccountEntry]:
             print(f"[Holehe] stderr: {result.stderr[:500]}")
             return _run_holehe_text_fallback(email)
 
-        # Parse JSON output
         entries = []
         for line in result.stdout.strip().splitlines():
             line = line.strip()
@@ -63,12 +83,13 @@ def _run_holehe_subprocess(email: str) -> List[AccountEntry]:
             try:
                 item = json.loads(line)
                 if item.get("exists") or item.get("rateLimit") is False:
+                    service_name = item.get("name", "Unknown")
                     entries.append(
                         AccountEntry(
-                            service=item.get("name", "Unknown"),
+                            service=service_name,
                             exists=bool(item.get("exists", False)),
                             url=item.get("url"),
-                            category=_get_category(item.get("name", "")),
+                            category=_get_category(service_name),
                         )
                     )
             except json.JSONDecodeError:
@@ -79,7 +100,7 @@ def _run_holehe_subprocess(email: str) -> List[AccountEntry]:
         print("[Holehe] Timed out")
         return []
     except FileNotFoundError:
-        print("[Holehe] Not found — is holehe installed?")
+        print("[Holehe] Not found - install holehe or set HOLEHE_BIN")
         return []
     except Exception as exc:
         print(f"[Holehe] Error: {exc}")
@@ -88,9 +109,10 @@ def _run_holehe_subprocess(email: str) -> List[AccountEntry]:
 
 def _run_holehe_text_fallback(email: str) -> List[AccountEntry]:
     """Run holehe without --json flag and parse text output."""
+    command = [*_holehe_base_command(), email, "--only-used"]
     try:
         result = subprocess.run(
-            [r"C:\Users\chinm\AppData\Roaming\Python\Python313\Scripts\holehe.exe", email, "--only-used"],
+            command,
             capture_output=True,
             text=True,
             timeout=120,
@@ -98,9 +120,7 @@ def _run_holehe_text_fallback(email: str) -> List[AccountEntry]:
         entries = []
         for line in result.stdout.splitlines():
             line = line.strip()
-            # Holehe marks found accounts with [+]
             if "[+]" in line:
-                # Filter out the explanatory summary line
                 if "Email used" in line or "Rate limit" in line:
                     continue
                 parts = line.split("[+]")

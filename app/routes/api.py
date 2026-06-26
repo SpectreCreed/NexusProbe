@@ -50,7 +50,7 @@ def _extract_user(request: Request, authorization: Optional[str] = None) -> Opti
     """
     Try to identify the current user.
     Priority: Authorization header → cookie.
-    Returns user email string or None (guest mode).
+    Returns Supabase user ID string or None (guest mode).
     """
     if authorization and authorization.startswith("Bearer "):
         token = authorization.removeprefix("Bearer ").strip()
@@ -58,9 +58,11 @@ def _extract_user(request: Request, authorization: Optional[str] = None) -> Opti
             try:
                 client = database.get_supabase()
                 user = client.auth.get_user(token)
-                return user.user.email if user and user.user else None
+                return str(user.user.id) if user and user.user else None
             except Exception:
                 pass
+    if settings.has_supabase:
+        return None
     return request.cookies.get("user_email")
 
 
@@ -168,8 +170,8 @@ async def api_start_search(
     if not EMAIL_REGEX.match(email):
         return _error(f"'{email}' is not a valid email address.")
 
-    user_email = _extract_user(request, authorization)
-    record = database.create_search(user_id=user_email, email=email)
+    user_id = _extract_user(request, authorization)
+    record = database.create_search(user_id=user_id, email=email)
     search_id = record["id"]
 
     # Queue background OSINT job (same runner used by web)
@@ -294,10 +296,10 @@ async def api_history(
     offset: int = 0,
 ):
     """Returns the authenticated user's search history (most recent first)."""
-    user_email = _extract_user(request, authorization)
+    user_id = _extract_user(request, authorization)
 
-    if user_email:
-        searches = database.get_user_searches(user_email, limit=limit)
+    if user_id:
+        searches = database.get_user_searches(user_id, limit=limit)
     else:
         # Guest mode — return all recent searches (no user filter)
         searches = database.get_all_searches(limit=limit)
@@ -322,10 +324,10 @@ async def api_recent(
     authorization: Optional[str] = Header(None),
 ):
     """Returns up to 5 most recent searches for the home screen carousel."""
-    user_email = _extract_user(request, authorization)
+    user_id = _extract_user(request, authorization)
 
-    if user_email:
-        searches = database.get_user_searches(user_email, limit=5)
+    if user_id:
+        searches = database.get_user_searches(user_id, limit=5)
     else:
         searches = database.get_all_searches(limit=5)
 
@@ -410,9 +412,11 @@ async def api_bulk_scan(
     if not emails:
         return _error("No valid email addresses provided.")
 
+    user_id = _extract_user(request, authorization)
+
     search_ids = []
     for email in emails:
-        record = db.create_search(user_id=None, email=email)
+        record = db.create_search(user_id=user_id, email=email)
         search_ids.append(record["id"])
         background_tasks.add_task(run_osint, record["id"], email)
 

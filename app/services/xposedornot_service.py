@@ -36,7 +36,14 @@ async def fetch_breaches(email: str) -> tuple[List[BreachEntry], str | None]:
             data = resp.json()
 
             breaches = []
-            breach_names = data.get("breaches", [])
+            breach_names_raw = data.get("breaches", [])
+            
+            breach_names = []
+            for item in breach_names_raw:
+                if isinstance(item, list):
+                    breach_names.extend(item)
+                else:
+                    breach_names.append(item)
             
             # Fetch metadata for these breaches if possible (optional enhancement)
             # For now, we return basic entries
