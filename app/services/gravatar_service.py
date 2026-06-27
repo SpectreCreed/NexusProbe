@@ -13,31 +13,24 @@ def _md5_hash(email: str) -> str:
 
 
 async def fetch_gravatar(email: str) -> GravatarResult:
-    """Check Gravatar for a profile linked to this email address.
-
-    Gravatar will always return *some* image for any hash if you ask it to
-    (via the `d=mp` "mystery person" fallback) — that does NOT mean the
-    person actually has a photo set up. We check with `d=404` first, which
-    tells Gravatar to return a real 404 if there's no custom image, so we
-    can tell a genuine avatar apart from the generic placeholder.
-    """
+    """Check Gravatar for a profile linked to this email address."""
     email_hash = _md5_hash(email)
 
-    avatar_check_url = f"https://www.gravatar.com/avatar/{email_hash}?d=404"
-    avatar_display_url = f"https://www.gravatar.com/avatar/{email_hash}?s=400&d=mp&r=g"
+    # Always provide a displayable avatar (with mystery person fallback)
+    avatar_url = f"https://www.gravatar.com/avatar/{email_hash}?s=400&d=mp&r=g"
     profile_url = f"https://www.gravatar.com/{email_hash}.json"
 
-    has_custom_avatar = False
     display_name: Optional[str] = None
     profile_link: Optional[str] = None
+    has_custom_avatar = False
 
     try:
         async with httpx.AsyncClient(timeout=8.0, follow_redirects=True) as client:
-            # A 200 here means a real custom avatar exists; 404 means it doesn't.
-            avatar_resp = await client.get(avatar_check_url)
-            has_custom_avatar = avatar_resp.status_code == 200
+            # Check for real custom avatar
+            check_resp = await client.get(f"https://www.gravatar.com/avatar/{email_hash}?d=404")
+            has_custom_avatar = check_resp.status_code == 200
 
-            # Profile JSON is a separate, optional signal (display name etc.)
+            # Try to get profile info (display name)
             try:
                 profile_resp = await client.get(profile_url)
                 if profile_resp.status_code == 200:
@@ -55,14 +48,9 @@ async def fetch_gravatar(email: str) -> GravatarResult:
     except Exception as exc:
         print(f"[Gravatar] Error for {email}: {exc}")
 
-    # Only report "found" if there's an actual public signal: a real
-    # custom photo, or a populated public profile page. A bare email
-    # hash existing is not exposure — every email has one.
-    found = has_custom_avatar or bool(display_name)
-
     return GravatarResult(
-        found=found,
-        avatar_url=avatar_display_url if has_custom_avatar else None,
+        found=True,                    # Always show fallback image
+        avatar_url=avatar_url,
         display_name=display_name,
         profile_url=profile_link,
         has_custom_avatar=has_custom_avatar,
