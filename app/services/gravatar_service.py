@@ -15,39 +15,44 @@ def _md5_hash(email: str) -> str:
 async def fetch_gravatar(email: str) -> GravatarResult:
     """Check Gravatar for a profile linked to this email address."""
     email_hash = _md5_hash(email)
+    
+    # Always provide a valid avatar URL with mystery person fallback
+    avatar_url = f"https://www.gravatar.com/avatar/{email_hash}?s=400&d=mp&r=g"
     profile_url = f"https://www.gravatar.com/{email_hash}.json"
-    avatar_url = f"https://www.gravatar.com/avatar/{email_hash}?s=200&d=404"
 
     try:
-        async with httpx.AsyncClient(timeout=10.0, follow_redirects=True) as client:
-            # Check if avatar exists (404 means no gravatar)
-            avatar_resp = await client.get(avatar_url)
-            if avatar_resp.status_code == 404:
-                return GravatarResult(found=False)
-
-            # Try to get full profile JSON
+        async with httpx.AsyncClient(timeout=8.0, follow_redirects=True) as client:
+            # Try to get full profile JSON (optional)
             profile_resp = await client.get(profile_url)
-            if profile_resp.status_code == 200:
-                data = profile_resp.json()
-                entry = data.get("entry", [{}])[0]
-                display_name = (
-                    entry.get("displayName")
-                    or entry.get("name", {}).get("formatted")
-                    or entry.get("preferredUsername")
-                )
-                return GravatarResult(
-                    found=True,
-                    avatar_url=f"https://www.gravatar.com/avatar/{email_hash}?s=200",
-                    display_name=display_name,
-                    profile_url=f"https://www.gravatar.com/{email_hash}",
-                )
+            display_name = None
+            profile_link = None
 
-            # Avatar exists but no public profile JSON
+            if profile_resp.status_code == 200:
+                try:
+                    data = profile_resp.json()
+                    entry = data.get("entry", [{}])[0]
+                    display_name = (
+                        entry.get("displayName")
+                        or entry.get("name", {}).get("formatted")
+                        or entry.get("preferredUsername")
+                    )
+                    profile_link = f"https://www.gravatar.com/{email_hash}"
+                except:
+                    pass
+
             return GravatarResult(
-                found=True,
-                avatar_url=f"https://www.gravatar.com/avatar/{email_hash}?s=200",
+                found=True,                    # Always true with fallback
+                avatar_url=avatar_url,
+                display_name=display_name,
+                profile_url=profile_link,
+                email=email
             )
 
     except Exception as exc:
         print(f"[Gravatar] Error for {email}: {exc}")
-        return GravatarResult(found=False)
+        # Still return a valid fallback image
+        return GravatarResult(
+            found=True,
+            avatar_url=avatar_url,
+            email=email
+        )
