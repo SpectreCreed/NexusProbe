@@ -1,6 +1,5 @@
 """
 OSINT Runner — orchestrates all OSINT modules concurrently and assembles the final result.
-Updates the search record in the database as it progresses.
 """
 from __future__ import annotations
 import asyncio
@@ -8,7 +7,7 @@ import json
 from typing import Optional
 
 from app import database
-from app.models import OsintResults
+from app.models import OsintResults, Experience, ExperienceEntry
 from app.services.gravatar_service import fetch_gravatar
 from app.services.xposedornot_service import fetch_breaches
 from app.services.domain_service import fetch_domain_intel
@@ -17,28 +16,25 @@ from app.services.risk_scoring import calculate_risk
 from app.services.dork_service import fetch_dork_results
 from app.services.github_service import fetch_github_profile
 from app.services.google_service import fetch_google_ecosystem
-from app.models import Experience, ExperienceEntry
 
 
 async def run_osint(search_id: str, email: str) -> None:
-    """
-    Main OSINT orchestrator. Called as a FastAPI BackgroundTask.
-    Runs all modules concurrently, saves results, and marks the search complete.
-    """
-    # Mark as processing
+    """Main OSINT orchestrator."""
     database.update_search(search_id, status="processing")
 
     errors = {}
 
     try:
         # Run all modules concurrently
-        gravatar_task  = asyncio.create_task(fetch_gravatar(email))
-        xon_task       = asyncio.create_task(fetch_breaches(email))
-        domain_task    = asyncio.create_task(fetch_domain_intel(email))
-        accounts_task  = asyncio.create_task(check_accounts(email))
-        dork_task      = asyncio.create_task(fetch_dork_results(email))
-        github_task    = asyncio.create_task(fetch_github_profile(email))
-        google_task    = asyncio.create_task(fetch_google_ecosystem(email))
+        tasks = [
+            asyncio.create_task(fetch_gravatar(email)),
+            asyncio.create_task(fetch_breaches(email)),
+            asyncio.create_task(fetch_domain_intel(email)),
+            asyncio.create_task(check_accounts(email)),
+            asyncio.create_task(fetch_dork_results(email)),
+            asyncio.create_task(fetch_github_profile(email)),
+            asyncio.create_task(fetch_google_ecosystem(email)),
+        ]
 
         (
             gravatar_result,
@@ -48,51 +44,62 @@ async def run_osint(search_id: str, email: str) -> None:
             dork_results,
             github_result,
             (google_result, google_error),
-        ) = await asyncio.gather(
-            gravatar_task,
-            xon_task,
-            domain_task,
-            accounts_task,
-            dork_task,
-            github_task,
-            google_task,
-            return_exceptions=False,
-        )
+        ) = await asyncio.gather(*tasks, return_exceptions=False)
 
         if xon_error:
-            errors["xon"] = xon_error
+            errors["xon"] = str(xon_error)
 
     except Exception as exc:
         print(f"[Runner] Fatal error for {email}: {exc}")
-        import traceback; traceback.print_exc()
-        database.update_search(
-            search_id,
-            status="failed",
-            error_message=str(exc),
-        )
+        database.update_search(search_id, status="failed", error_message=str(exc))
         return
 
-    # Calculate risk score
+    # Build multiple profiles list (for UI grid)
+    profiles = []
+    if gravatar_result and gravatar_result.found:
+        profiles.append({
+            "platform": "Gravatar",
+            "avatar_url": gravatar_result.avatar_url,
+            "username": gravatar_result.display_name or email.split('@')[0],
+            "url": gravatar_result.profile_url,
+        })
+
+    if github_result:
+        profiles.append({
+            "platform": "GitHub",
+            "avatar_url": github_result.avatar_url or "",
+            "username": github_result.username,
+            "url": github_result.profile_url,
+        })
+
+    # Add more from accounts (Holehe) — you can expand this
+    for acc in accounts:
+        if acc.exists and acc.platform:
+            profiles.append({
+                "platform": acc.platform,
+                "avatar_url": "",  # Add avatar_url if your account model supports it
+                "username": acc.username or "",
+                "url": acc.url or "",
+            })
+
+    # Calculate risk
     risk = calculate_risk(
         breaches=breaches,
         accounts=accounts,
-        has_gravatar=gravatar_result.found if gravatar_result else False,
-        has_domain_intel=True,
+        has_gravatar=bool(gravatar_result and gravatar_result.found),
+        has_domain_intel=bool(domain_result),
     )
 
-    # Assemble Experience from github
-    experience = Experience(found=False, entries=[])
+    # Experience
+    experience = Experience(found=bool(github_result and github_result.company), entries=[])
     if github_result and github_result.company:
-        experience.found = True
-        experience.entries.append(
-            ExperienceEntry(
-                company=github_result.company,
-                role="Unknown",
-                date_range="Present"
-            )
-        )
+        experience.entries.append(ExperienceEntry(
+            company=github_result.company,
+            role="Contributor",
+            date_range="Present"
+        ))
 
-    # Assemble full results
+    # Full results
     results = OsintResults(
         email=email,
         gravatar=gravatar_result,
@@ -102,14 +109,14 @@ async def run_osint(search_id: str, email: str) -> None:
         breaches=breaches,
         breach_count=len(breaches),
         accounts=accounts,
-        account_count=sum(1 for a in accounts if a.exists),
+        account_count=len([a for a in accounts if a.exists]),
         domain=domain_result,
         risk=risk,
         dorks=dork_results,
         errors=errors,
+        profiles=profiles,          # <-- NEW: Multiple profiles for UI
     )
 
-    # Persist results
     database.update_search(
         search_id,
         status="completed",
