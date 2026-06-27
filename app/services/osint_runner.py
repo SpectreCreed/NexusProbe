@@ -69,14 +69,14 @@ async def run_osint(search_id: str, email: str) -> None:
             "platform": "GitHub",
             "avatar_url": github_result.avatar_url or "",
             "username": github_result.username,
-            "url": github_result.profile_url,
+            "url": github_result.html_url,
         })
 
     # Add more from accounts (Holehe) — you can expand this
     for acc in accounts:
-        if acc.exists and acc.platform:
+        if acc.exists and acc.service:
             profiles.append({
-                "platform": acc.platform,
+                "platform": acc.service,
                 "avatar_url": "",  # Add avatar_url if your account model supports it
                 "username": acc.username or "",
                 "url": acc.url or "",

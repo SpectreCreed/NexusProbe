@@ -7,6 +7,7 @@ from __future__ import annotations
 import asyncio
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -33,8 +34,22 @@ SERVICE_CATEGORIES = {
 }
 
 
+_TLD_SUFFIX_RE = re.compile(r"\.(com|net|org|io|co|app|tv|me|gg|fm)$")
+
+
+def _normalize_service_key(service_name: str) -> str:
+    """Normalize a service name for category lookup.
+
+    Holehe sometimes returns the bare module name ("twitter") and
+    sometimes the domain-style name ("twitter.com"). Without this, any
+    domain-style name silently falls through to the "other" category.
+    """
+    key = service_name.strip().lower()
+    return _TLD_SUFFIX_RE.sub("", key)
+
+
 def _get_category(service_name: str) -> str:
-    return SERVICE_CATEGORIES.get(service_name.lower(), "other")
+    return SERVICE_CATEGORIES.get(_normalize_service_key(service_name), "other")
 
 
 def _holehe_base_command() -> List[str]:

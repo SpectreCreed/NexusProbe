@@ -54,6 +54,7 @@ class GravatarResult(BaseModel):
     avatar_url: Optional[str] = None
     display_name: Optional[str] = None
     profile_url: Optional[str] = None
+    has_custom_avatar: bool = False  # True only if a real (non-default) photo exists
 
 
 class GitHubProfile(BaseModel):

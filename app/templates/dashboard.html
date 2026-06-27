@@ -8,86 +8,95 @@
 
 {# ── Map service name → domain for favicons ─── #}
 {% set svc_domains = {
-  'amazon.com': 'amazon.com', 'amazon': 'amazon.com',
-  'github.com': 'github.com', 'github': 'github.com',
-  'google': 'google.com', 'google.com': 'google.com',
-  'twitter.com': 'twitter.com', 'twitter': 'twitter.com', 'x.com': 'x.com',
-  'instagram.com': 'instagram.com', 'instagram': 'instagram.com',
-  'facebook.com': 'facebook.com', 'facebook': 'facebook.com',
-  'linkedin.com': 'linkedin.com', 'linkedin': 'linkedin.com',
-  'spotify.com': 'spotify.com', 'spotify': 'spotify.com',
-  'microsoft': 'microsoft.com', 'office365.com': 'microsoft.com', 'office365': 'microsoft.com',
-  'adobe.com': 'adobe.com', 'adobe': 'adobe.com',
-  'reddit.com': 'reddit.com', 'reddit': 'reddit.com',
-  'pinterest.com': 'pinterest.com', 'pinterest': 'pinterest.com',
-  'tumblr.com': 'tumblr.com', 'tumblr': 'tumblr.com',
-  'snapchat.com': 'snapchat.com', 'snapchat': 'snapchat.com',
-  'tiktok.com': 'tiktok.com', 'tiktok': 'tiktok.com',
-  'youtube.com': 'youtube.com', 'youtube': 'youtube.com',
-  'twitch.tv': 'twitch.tv', 'twitch': 'twitch.tv',
-  'discord.com': 'discord.com', 'discord': 'discord.com',
-  'dropbox.com': 'dropbox.com', 'dropbox': 'dropbox.com',
-  'paypal.com': 'paypal.com', 'paypal': 'paypal.com',
-  'ebay.com': 'ebay.com', 'ebay': 'ebay.com',
-  'etsy.com': 'etsy.com', 'etsy': 'etsy.com',
-  'wordpress.com': 'wordpress.com', 'wordpress': 'wordpress.com',
-  'medium.com': 'medium.com', 'medium': 'medium.com',
-  'substack.com': 'substack.com', 'substack': 'substack.com',
-  'steam': 'steampowered.com', 'steam community': 'steampowered.com',
-  'gitlab.com': 'gitlab.com', 'gitlab': 'gitlab.com',
-  'bitbucket.org': 'bitbucket.org', 'bitbucket': 'bitbucket.org',
-  'stackoverflow.com': 'stackoverflow.com', 'stackoverflow': 'stackoverflow.com',
-  'quora.com': 'quora.com', 'quora': 'quora.com',
-  'duolingo.com': 'duolingo.com', 'duolingo': 'duolingo.com',
-  'gravatar.com': 'gravatar.com', 'gravatar': 'gravatar.com',
-  'protonmail.com': 'protonmail.com', 'protonmail': 'protonmail.com',
-  'coinbase.com': 'coinbase.com', 'coinbase': 'coinbase.com',
-  'netflix.com': 'netflix.com', 'netflix': 'netflix.com',
-  'flickr.com': 'flickr.com', 'flickr': 'flickr.com',
-  'lastfm': 'last.fm', 'last.fm': 'last.fm',
-  'replit.com': 'replit.com', 'replit': 'replit.com',
-  'patreon.com': 'patreon.com', 'patreon': 'patreon.com',
-  'chess.com': 'chess.com', 'roblox.com': 'roblox.com', 'roblox': 'roblox.com',
-  'zoho.com': 'zoho.com', 'zoho': 'zoho.com',
-  'mozilla': 'mozilla.org', 'firefox': 'mozilla.org',
+'amazon.com': 'amazon.com', 'amazon': 'amazon.com',
+'github.com': 'github.com', 'github': 'github.com',
+'google': 'google.com', 'google.com': 'google.com',
+'twitter.com': 'twitter.com', 'twitter': 'twitter.com', 'x.com': 'x.com',
+'instagram.com': 'instagram.com', 'instagram': 'instagram.com',
+'facebook.com': 'facebook.com', 'facebook': 'facebook.com',
+'linkedin.com': 'linkedin.com', 'linkedin': 'linkedin.com',
+'spotify.com': 'spotify.com', 'spotify': 'spotify.com',
+'microsoft': 'microsoft.com', 'office365.com': 'microsoft.com', 'office365': 'microsoft.com',
+'adobe.com': 'adobe.com', 'adobe': 'adobe.com',
+'reddit.com': 'reddit.com', 'reddit': 'reddit.com',
+'pinterest.com': 'pinterest.com', 'pinterest': 'pinterest.com',
+'tumblr.com': 'tumblr.com', 'tumblr': 'tumblr.com',
+'snapchat.com': 'snapchat.com', 'snapchat': 'snapchat.com',
+'tiktok.com': 'tiktok.com', 'tiktok': 'tiktok.com',
+'youtube.com': 'youtube.com', 'youtube': 'youtube.com',
+'twitch.tv': 'twitch.tv', 'twitch': 'twitch.tv',
+'discord.com': 'discord.com', 'discord': 'discord.com',
+'dropbox.com': 'dropbox.com', 'dropbox': 'dropbox.com',
+'paypal.com': 'paypal.com', 'paypal': 'paypal.com',
+'ebay.com': 'ebay.com', 'ebay': 'ebay.com',
+'etsy.com': 'etsy.com', 'etsy': 'etsy.com',
+'wordpress.com': 'wordpress.com', 'wordpress': 'wordpress.com',
+'medium.com': 'medium.com', 'medium': 'medium.com',
+'substack.com': 'substack.com', 'substack': 'substack.com',
+'steam': 'steampowered.com', 'steam community': 'steampowered.com',
+'gitlab.com': 'gitlab.com', 'gitlab': 'gitlab.com',
+'bitbucket.org': 'bitbucket.org', 'bitbucket': 'bitbucket.org',
+'stackoverflow.com': 'stackoverflow.com', 'stackoverflow': 'stackoverflow.com',
+'quora.com': 'quora.com', 'quora': 'quora.com',
+'duolingo.com': 'duolingo.com', 'duolingo': 'duolingo.com',
+'gravatar.com': 'gravatar.com', 'gravatar': 'gravatar.com',
+'protonmail.com': 'protonmail.com', 'protonmail': 'protonmail.com',
+'coinbase.com': 'coinbase.com', 'coinbase': 'coinbase.com',
+'netflix.com': 'netflix.com', 'netflix': 'netflix.com',
+'flickr.com': 'flickr.com', 'flickr': 'flickr.com',
+'lastfm': 'last.fm', 'last.fm': 'last.fm',
+'replit.com': 'replit.com', 'replit': 'replit.com',
+'patreon.com': 'patreon.com', 'patreon': 'patreon.com',
+'chess.com': 'chess.com', 'roblox.com': 'roblox.com', 'roblox': 'roblox.com',
+'zoho.com': 'zoho.com', 'zoho': 'zoho.com',
+'mozilla': 'mozilla.org', 'firefox': 'mozilla.org',
 } %}
 
 {% macro get_domain(service) %}{{ svc_domains.get(service.lower(), service.lower() ~ '.com') }}{% endmacro %}
 
 {% block content %}
 
-{% set risk         = results.get('risk', {}) %}
-{% set gravatar     = results.get('gravatar', {}) %}
-{% set github       = results.get('github', {}) %}
-{% set google_data  = results.get('google_data', {}) %}
-{% set experience   = results.get('experience', {}) %}
-{% set breaches     = results.get('breaches', []) %}
-{% set accounts     = results.get('accounts', []) %}
-{% set domain       = results.get('domain', {}) %}
-{% set errors       = results.get('errors', {}) %}
-{% set dorks        = results.get('dorks', []) %}
+{% set risk = results.get('risk', {}) %}
+{% set gravatar = results.get('gravatar', {}) %}
+{% set github = results.get('github', {}) %}
+{% set google_data = results.get('google_data', {}) %}
+{% set experience = results.get('experience', {}) %}
+{% set breaches = results.get('breaches', []) %}
+{% set accounts = results.get('accounts', []) %}
+{% set domain = results.get('domain', {}) %}
+{% set errors = results.get('errors', {}) %}
+{% set dorks = results.get('dorks', []) %}
 {% set found_accounts = accounts | selectattr('exists') | list %}
 
 {# Collect all profile avatars #}
 {% set all_avatars = [] %}
-{% if github.get('found') and github.get('avatar_url') %}{% set _ = all_avatars.append({'url': github.avatar_url, 'service': 'github', 'domain': 'github.com'}) %}{% endif %}
-{% if gravatar.get('found') and gravatar.get('avatar_url') %}{% set _ = all_avatars.append({'url': gravatar.avatar_url, 'service': 'gravatar', 'domain': 'gravatar.com'}) %}{% endif %}
+{% if github.get('found') and github.get('avatar_url') %}{% set _ = all_avatars.append({'url': github.avatar_url,
+'service': 'github', 'domain': 'github.com'}) %}{% endif %}
+{% if gravatar.get('found') and gravatar.get('avatar_url') %}{% set _ = all_avatars.append({'url': gravatar.avatar_url,
+'service': 'gravatar', 'domain': 'gravatar.com'}) %}{% endif %}
 
 {# Collect all profile links #}
 {% set all_links = [] %}
-{% if github.get('found') and github.get('html_url') %}{% set _ = all_links.append({'url': github.html_url, 'service': 'GitHub', 'domain': 'github.com'}) %}{% endif %}
-{% if gravatar.get('found') and gravatar.get('profile_url') %}{% set _ = all_links.append({'url': gravatar.profile_url, 'service': 'Gravatar', 'domain': 'gravatar.com'}) %}{% endif %}
-{% for acc in found_accounts if acc.get('url') %}{% set _ = all_links.append({'url': acc.url, 'service': acc.service, 'domain': get_domain(acc.service)}) %}{% endfor %}
+{% if github.get('found') and github.get('html_url') %}{% set _ = all_links.append({'url': github.html_url, 'service':
+'GitHub', 'domain': 'github.com'}) %}{% endif %}
+{% if gravatar.get('found') and gravatar.get('profile_url') %}{% set _ = all_links.append({'url': gravatar.profile_url,
+'service': 'Gravatar', 'domain': 'gravatar.com'}) %}{% endif %}
+{% for acc in found_accounts if acc.get('url') %}{% set _ = all_links.append({'url': acc.url, 'service': acc.service,
+'domain': get_domain(acc.service)}) %}{% endfor %}
 
 {# Collect all dates #}
 {% set all_dates = [] %}
-{% if github.get('found') and github.get('created_at') %}{% set _ = all_dates.append({'label': 'GitHub Joined', 'value': github.created_at[:10], 'service': 'GitHub', 'domain': 'github.com'}) %}{% endif %}
-{% for acc in found_accounts if acc.get('joined_at') %}{% set _ = all_dates.append({'label': 'Joined', 'value': acc.joined_at[:10], 'service': acc.service, 'domain': get_domain(acc.service)}) %}{% endfor %}
+{% if github.get('found') and github.get('created_at') %}{% set _ = all_dates.append({'label': 'GitHub Joined', 'value':
+github.created_at[:10], 'service': 'GitHub', 'domain': 'github.com'}) %}{% endif %}
+{% for acc in found_accounts if acc.get('joined_at') %}{% set _ = all_dates.append({'label': 'Joined', 'value':
+acc.joined_at[:10], 'service': acc.service, 'domain': get_domain(acc.service)}) %}{% endfor %}
 
 {# Collect all locations #}
 {% set all_locations = [] %}
-{% if github.get('found') and github.get('location') %}{% set _ = all_locations.append({'value': github.location, 'service': 'GitHub', 'domain': 'github.com'}) %}{% endif %}
-{% for acc in found_accounts if acc.get('location') %}{% set _ = all_locations.append({'value': acc.location, 'service': acc.service, 'domain': get_domain(acc.service)}) %}{% endfor %}
+{% if github.get('found') and github.get('location') %}{% set _ = all_locations.append({'value': github.location,
+'service': 'GitHub', 'domain': 'github.com'}) %}{% endif %}
+{% for acc in found_accounts if acc.get('location') %}{% set _ = all_locations.append({'value': acc.location, 'service':
+acc.service, 'domain': get_domain(acc.service)}) %}{% endfor %}
 
 
 {% if status in ('pending', 'processing') %}
@@ -108,18 +117,19 @@
 {% else %}
 
 {# ══════════════════════════════════════════════════ #}
-{# HEADER                                            #}
+{# HEADER #}
 {# ══════════════════════════════════════════════════ #}
 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 fade-in">
   <div class="flex items-center gap-4">
     {% if all_avatars %}
     <img src="{{ all_avatars[0].url }}" alt="Avatar"
-         class="w-14 h-14 rounded-2xl border-2 border-indigo-500/30 shadow-lg shadow-indigo-500/10 object-cover"/>
+      class="w-14 h-14 rounded-2xl border-2 border-indigo-500/30 shadow-lg shadow-indigo-500/10 object-cover" />
     {% elif gravatar.get('avatar_url') %}
     <img src="{{ gravatar.avatar_url }}" alt="Avatar"
-         class="w-14 h-14 rounded-2xl border-2 border-indigo-500/30 shadow-lg object-cover"/>
+      class="w-14 h-14 rounded-2xl border-2 border-indigo-500/30 shadow-lg object-cover" />
     {% else %}
-    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-600 to-violet-700 flex items-center justify-center text-2xl font-bold text-white shadow-lg shadow-indigo-500/20">
+    <div
+      class="w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-600 to-violet-700 flex items-center justify-center text-2xl font-bold text-white shadow-lg shadow-indigo-500/20">
       {{ email[0].upper() }}
     </div>
     {% endif %}
@@ -135,12 +145,14 @@
   <div class="flex items-center gap-2">
     <a href="/export/{{ search_id }}/json" class="btn-secondary">
       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
       </svg> JSON
     </a>
     <a href="/export/{{ search_id }}/pdf" class="btn-secondary">
       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
       </svg> PDF
     </a>
     <a href="/" class="btn-ghost">← New Search</a>
@@ -148,26 +160,29 @@
 </div>
 
 {# ══════════════════════════════════════════════════ #}
-{# ROW 1: Risk + Exposure                            #}
+{# ROW 1: Risk + Exposure #}
 {# ══════════════════════════════════════════════════ #}
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-5 fade-in-delay-1">
   <div class="glass-card p-6 flex flex-col items-center">
     <div class="section-header w-full">
       <div class="section-icon bg-amber-500/15 text-amber-400">⚠️</div>
       <h2 class="section-title">Risk Score</h2>
-      {% if risk %}<span class="badge risk-badge-{{ risk.get('color', 'emerald') }} ml-auto">{{ risk.get('label', 'Unknown') }}</span>{% endif %}
+      {% if risk %}<span class="badge risk-badge-{{ risk.get('color', 'emerald') }} ml-auto">{{ risk.get('label',
+        'Unknown') }}</span>{% endif %}
     </div>
     {% if risk %}
     <div id="risk-gauge" class="w-full"></div>
-    <div class="w-full mt-2 space-y-2">
+    <p class="text-slate-600 text-[11px] mt-3 mb-1 w-full">Score contribution by signal (not item counts)</p>
+    <div class="w-full mt-1 space-y-2">
       {% for key, val in risk.get('breakdown', {}).items() %}
       <div class="flex items-center justify-between text-xs">
         <span class="text-slate-500 capitalize">{{ key.replace('_', ' ') }}</span>
         <div class="flex items-center gap-2">
           <div class="w-24 h-1.5 bg-slate-800 rounded-full overflow-hidden">
-            <div class="h-full bg-gradient-to-r from-indigo-500 to-violet-500 rounded-full" style="width: {{ [val * 2, 100]|min }}%"></div>
+            <div class="h-full bg-gradient-to-r from-indigo-500 to-violet-500 rounded-full"
+              style="width: {{ [val * 2, 100]|min }}%"></div>
           </div>
-          <span class="text-slate-400 w-5 text-right">{{ val }}</span>
+          <span class="text-slate-400 w-12 text-right">{{ val }} pts</span>
         </div>
       </div>
       {% endfor %}
@@ -194,7 +209,8 @@
     </div>
     <div class="grid grid-cols-3 gap-3 mt-4 pt-4 border-t border-slate-800">
       <div class="text-center">
-        <p class="text-2xl font-black {% if breaches|length > 0 %}text-red-400{% else %}text-emerald-400{% endif %}">{{ breaches|length }}</p>
+        <p class="text-2xl font-black {% if breaches|length > 0 %}text-red-400{% else %}text-emerald-400{% endif %}">{{
+          breaches|length }}</p>
         <p class="text-slate-500 text-xs">Breaches</p>
       </div>
       <div class="text-center">
@@ -212,7 +228,7 @@
 </div>
 
 {# ══════════════════════════════════════════════════ #}
-{# PROFILE PICTURES                                  #}
+{# PROFILE PICTURES #}
 {# ══════════════════════════════════════════════════ #}
 {% if all_avatars %}
 <div class="glass-card p-6 mb-5 fade-in-delay-1">
@@ -224,9 +240,9 @@
   <div class="profile-pics-grid">
     {% for av in all_avatars %}
     <div class="profile-pic-item">
-      <img class="main-pic" src="{{ av.url }}" alt="{{ av.service }}" onerror="this.style.display='none'"/>
+      <img class="main-pic" src="{{ av.url }}" alt="{{ av.service }}" onerror="this.style.display='none'" />
       <div class="profile-pic-badge">
-        <img src="{{ svc_icon(av.domain, 32) }}" alt="{{ av.service }}" onerror="this.style.display='none'"/>
+        <img src="{{ svc_icon(av.domain, 32) }}" alt="{{ av.service }}" onerror="this.style.display='none'" />
       </div>
     </div>
     {% endfor %}
@@ -235,7 +251,7 @@
 {% endif %}
 
 {# ══════════════════════════════════════════════════ #}
-{# CONNECTION GRAPH                                  #}
+{# CONNECTION GRAPH #}
 {# ══════════════════════════════════════════════════ #}
 <div class="glass-card p-6 mb-5 fade-in-delay-1">
   <div class="section-header mb-4">
@@ -246,21 +262,27 @@
   <div id="connection-graph" class="w-full" style="height: 320px; position: relative;">
     <svg id="graph-svg" width="100%" height="100%"></svg>
     <div id="graph-tooltip" style="position:absolute;pointer-events:none;display:none;"
-         class="glass-card px-3 py-2 text-xs text-slate-200 shadow-xl z-10"></div>
+      class="glass-card px-3 py-2 text-xs text-slate-200 shadow-xl z-10"></div>
   </div>
   <div class="flex items-center gap-4 mt-3 text-xs text-slate-600">
-    <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-violet-500 inline-block"></span> Email</span>
-    <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span> Breach</span>
-    <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-indigo-500 inline-block"></span> Account</span>
-    <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-cyan-500 inline-block"></span> Domain</span>
-    <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span> GitHub</span>
+    <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-violet-500 inline-block"></span>
+      Email</span>
+    <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span>
+      Breach</span>
+    <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-indigo-500 inline-block"></span>
+      Account</span>
+    <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-cyan-500 inline-block"></span>
+      Domain</span>
+    <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span>
+      GitHub</span>
   </div>
 </div>
 
 {# ══════════════════════════════════════════════════ #}
-{# ACCOUNTS & PLATFORMS                              #}
+{# ACCOUNTS & PLATFORMS #}
 {# ══════════════════════════════════════════════════ #}
-<h2 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3 mt-2 fade-in-delay-2">Accounts &amp; Platforms</h2>
+<h2 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3 mt-2 fade-in-delay-2">Accounts &amp; Platforms
+</h2>
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-5 fade-in-delay-2">
 
   {# Left: Summary card #}
@@ -271,7 +293,8 @@
     </div>
     <div>
       <p class="text-lg font-bold text-slate-100">Registered Accounts</p>
-      <p class="text-slate-500 text-sm">{{ found_accounts|length }} account{{ 's' if found_accounts|length != 1 else '' }} found</p>
+      <p class="text-slate-500 text-sm">{{ found_accounts|length }} account{{ 's' if found_accounts|length != 1 else ''
+        }} found</p>
     </div>
     {% if found_accounts %}
     <div class="service-icon-grid">
@@ -279,7 +302,7 @@
       {% set d = get_domain(acc.service) %}
       <div class="service-icon-item" title="{{ acc.service }}">
         <img src="{{ svc_icon(d, 48) }}" alt="{{ acc.service }}"
-             onerror="this.parentElement.innerHTML='<span style=\'font-size:1rem;font-weight:700;color:#94a3b8\'>{{ acc.service[0].upper() }}</span>'"/>
+          onerror="this.parentElement.innerHTML='<span style=\'font-size:1rem;font-weight:700;color:#94a3b8\'>{{ acc.service[0].upper() }}</span>'" />
       </div>
       {% endfor %}
     </div>
@@ -292,19 +315,20 @@
   {% if github.get('found') %}
   <div class="service-card lg:col-span-2">
     <div class="service-card-header">
-      <img class="service-icon-badge" src="{{ svc_icon('github.com', 32) }}" alt="GitHub"/>
+      <img class="service-icon-badge" src="{{ svc_icon('github.com', 32) }}" alt="GitHub" />
       <span class="service-label">GitHub</span>
       <a href="{{ github.html_url }}" target="_blank" rel="noopener noreferrer"
-         class="ml-auto text-slate-600 hover:text-indigo-400 transition-colors">
+        class="ml-auto text-slate-600 hover:text-indigo-400 transition-colors">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
         </svg>
       </a>
     </div>
 
     <div class="service-profile-row">
       {% if github.get('avatar_url') %}
-      <img class="service-avatar" src="{{ github.avatar_url }}" alt="{{ github.username }}"/>
+      <img class="service-avatar" src="{{ github.avatar_url }}" alt="{{ github.username }}" />
       {% else %}
       <div class="service-avatar-placeholder">{{ (github.username or 'G')[0].upper() }}</div>
       {% endif %}
@@ -314,7 +338,8 @@
         <a href="{{ github.html_url }}" target="_blank" rel="noopener noreferrer" class="service-view-link">
           View GitHub Profile
           <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
           </svg>
         </a>
       </div>
@@ -360,9 +385,10 @@
     {% if github.get('blog') %}
     <div class="service-meta-row">
       <span class="service-meta-label">Website</span>
-      <a href="{{ github.blog if github.blog.startswith('http') else 'https://' ~ github.blog }}"
-         target="_blank" rel="noopener noreferrer"
-         class="service-meta-value text-indigo-400 hover:text-indigo-300 transition-colors truncate">{{ github.blog }}</a>
+      <a href="{{ github.blog if github.blog.startswith('http') else 'https://' ~ github.blog }}" target="_blank"
+        rel="noopener noreferrer"
+        class="service-meta-value text-indigo-400 hover:text-indigo-300 transition-colors truncate">{{ github.blog
+        }}</a>
     </div>
     {% endif %}
 
@@ -391,535 +417,560 @@
       </div>
     </div>
     {% endif %}
-  {% else %}
-  <div class="service-card lg:col-span-2 opacity-70">
-    <div class="service-card-header">
-      <div class="service-icon-badge bg-slate-800/50 flex items-center justify-center text-slate-500">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 18c-4.51 2-5-2-7-2" />
-        </svg>
+    {% else %}
+    <div class="service-card lg:col-span-2 opacity-70">
+      <div class="service-card-header">
+        <div class="service-icon-badge bg-slate-800/50 flex items-center justify-center text-slate-500">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 18c-4.51 2-5-2-7-2" />
+          </svg>
+        </div>
+        <span class="service-label text-slate-500">GitHub</span>
       </div>
-      <span class="service-label text-slate-500">GitHub</span>
-    </div>
-    <div class="flex flex-col items-center justify-center py-8">
-      <div class="w-12 h-12 rounded-full bg-slate-800/50 flex items-center justify-center mb-3 text-slate-500">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 18c-4.51 2-5-2-7-2" />
-        </svg>
+      <div class="flex flex-col items-center justify-center py-8">
+        <div class="w-12 h-12 rounded-full bg-slate-800/50 flex items-center justify-center mb-3 text-slate-500">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 18c-4.51 2-5-2-7-2" />
+          </svg>
+        </div>
+        <p class="text-slate-400 font-medium text-sm">No GitHub profile found</p>
+        <p class="text-xs text-slate-500 mt-1">This email does not appear to be publicly associated with any GitHub
+          account.</p>
       </div>
-      <p class="text-slate-400 font-medium text-sm">No GitHub profile found</p>
-      <p class="text-xs text-slate-500 mt-1">This email does not appear to be publicly associated with any GitHub account.</p>
     </div>
+    {% endif %}
   </div>
-  {% endif %}
-</div>
 
-{# ─── Other service cards (3-col grid) ─── #}
-{% if found_accounts %}
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-5 fade-in-delay-2">
-  {% for acc in found_accounts if acc.service.lower() not in ['github', 'github.com'] %}
-  {% set d = get_domain(acc.service) %}
-  <div class="service-card">
-    <div class="service-card-header">
-      <img class="service-icon-badge" src="{{ svc_icon(d, 32) }}" alt="{{ acc.service }}"
-           onerror="this.style.display='none'"/>
-      <span class="service-label">{{ acc.service }}</span>
-      {% if acc.get('url') %}
-      <a href="{{ acc.url }}" target="_blank" rel="noopener noreferrer"
-         class="ml-auto text-slate-600 hover:text-indigo-400 transition-colors">
-        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-        </svg>
-      </a>
-      {% endif %}
-    </div>
-
-    <div class="service-profile-row">
-      {% if acc.get('avatar_url') %}
-      <img class="service-avatar" src="{{ acc.avatar_url }}" alt="{{ acc.service }}"
-           onerror="this.style.display='none'"/>
-      {% else %}
-      <div class="service-avatar-placeholder">{{ acc.service[0].upper() }}</div>
-      {% endif %}
-      <div class="min-w-0">
-        <p class="service-profile-name truncate">{{ acc.get('display_name') or acc.service ~ ' Account' }}</p>
-        {% if acc.get('username') %}
-        <p class="service-profile-sub">@{{ acc.username }}</p>
-        {% else %}
-        <p class="service-profile-sub capitalize">{{ acc.category }}</p>
-        {% endif %}
+  {# ─── Other service cards (3-col grid) ─── #}
+  {% if found_accounts %}
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-5 fade-in-delay-2">
+    {% for acc in found_accounts if acc.service.lower() not in ['github', 'github.com'] %}
+    {% set d = get_domain(acc.service) %}
+    <div class="service-card">
+      <div class="service-card-header">
+        <img class="service-icon-badge" src="{{ svc_icon(d, 32) }}" alt="{{ acc.service }}"
+          onerror="this.style.display='none'" />
+        <span class="service-label">{{ acc.service }}</span>
         {% if acc.get('url') %}
-        <a href="{{ acc.url }}" target="_blank" rel="noopener noreferrer" class="service-view-link">
-          View Profile
-          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+        <a href="{{ acc.url }}" target="_blank" rel="noopener noreferrer"
+          class="ml-auto text-slate-600 hover:text-indigo-400 transition-colors">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
           </svg>
         </a>
         {% endif %}
       </div>
-    </div>
 
-    <div class="service-meta">
-      {% if acc.get('followers') is not none %}
-      <div class="service-meta-grid">
-        <div class="service-meta-row">
-          <span class="service-meta-label">Followers</span>
-          <span class="service-meta-value">{{ "{:,}".format(acc.followers) }}</span>
+      <div class="service-profile-row">
+        {% if acc.get('avatar_url') %}
+        <img class="service-avatar" src="{{ acc.avatar_url }}" alt="{{ acc.service }}"
+          onerror="this.style.display='none'" />
+        {% else %}
+        <div class="service-avatar-placeholder">{{ acc.service[0].upper() }}</div>
+        {% endif %}
+        <div class="min-w-0">
+          <p class="service-profile-name truncate">{{ acc.get('display_name') or acc.service ~ ' Account' }}</p>
+          {% if acc.get('username') %}
+          <p class="service-profile-sub">@{{ acc.username }}</p>
+          {% else %}
+          <p class="service-profile-sub capitalize">{{ acc.category }}</p>
+          {% endif %}
+          {% if acc.get('url') %}
+          <a href="{{ acc.url }}" target="_blank" rel="noopener noreferrer" class="service-view-link">
+            View Profile
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            </svg>
+          </a>
+          {% endif %}
         </div>
-        {% if acc.get('following') is not none %}
-        <div class="service-meta-row">
-          <span class="service-meta-label">Following</span>
-          <span class="service-meta-value">{{ "{:,}".format(acc.following) }}</span>
+      </div>
+
+      <div class="service-meta">
+        {% if acc.get('followers') is not none %}
+        <div class="service-meta-grid">
+          <div class="service-meta-row">
+            <span class="service-meta-label">Followers</span>
+            <span class="service-meta-value">{{ "{:,}".format(acc.followers) }}</span>
+          </div>
+          {% if acc.get('following') is not none %}
+          <div class="service-meta-row">
+            <span class="service-meta-label">Following</span>
+            <span class="service-meta-value">{{ "{:,}".format(acc.following) }}</span>
+          </div>
+          {% endif %}
         </div>
         {% endif %}
+        {% if acc.get('location') %}
+        <div class="service-meta-row">
+          <span class="service-meta-label">Location</span>
+          <span class="service-meta-value">{{ acc.location }}</span>
+        </div>
+        {% endif %}
+        {% if acc.get('bio') %}
+        <p class="text-slate-600 text-xs line-clamp-2">{{ acc.bio }}</p>
+        {% endif %}
+        {% if acc.get('joined_at') %}
+        <div class="service-meta-row">
+          <span class="service-meta-label">Joined</span>
+          <span class="service-meta-value">{{ acc.joined_at[:10] }}</span>
+        </div>
+        {% endif %}
+        {# Extra key-value metadata from holehe extended output #}
+        {% for k, v in (acc.get('extra') or {}).items() if v %}
+        <div class="service-meta-row">
+          <span class="service-meta-label">{{ k.replace('_', ' ') }}</span>
+          <span class="service-meta-value">{{ v }}</span>
+        </div>
+        {% endfor %}
       </div>
-      {% endif %}
-      {% if acc.get('location') %}
-      <div class="service-meta-row">
-        <span class="service-meta-label">Location</span>
-        <span class="service-meta-value">{{ acc.location }}</span>
-      </div>
-      {% endif %}
-      {% if acc.get('bio') %}
-      <p class="text-slate-600 text-xs line-clamp-2">{{ acc.bio }}</p>
-      {% endif %}
-      {% if acc.get('joined_at') %}
-      <div class="service-meta-row">
-        <span class="service-meta-label">Joined</span>
-        <span class="service-meta-value">{{ acc.joined_at[:10] }}</span>
-      </div>
-      {% endif %}
-      {# Extra key-value metadata from holehe extended output #}
-      {% for k, v in (acc.get('extra') or {}).items() if v %}
-      <div class="service-meta-row">
-        <span class="service-meta-label">{{ k.replace('_', ' ') }}</span>
-        <span class="service-meta-value">{{ v }}</span>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {# ══════════════════════════════════════════════════ #}
+  {# EXPERIENCE & PROFESSIONAL #}
+  {# ══════════════════════════════════════════════════ #}
+  {% if experience and experience.get('found') %}
+  <h2 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3 fade-in-delay-3">Experience &amp;
+    Professional</h2>
+  <div class="glass-card p-6 mb-5 fade-in-delay-3">
+    <div class="section-header mb-4">
+      <div class="section-icon bg-blue-500/15 text-blue-400">💼</div>
+      <h2 class="section-title">Employment History</h2>
+    </div>
+    <div class="space-y-4">
+      {% for entry in experience.get('entries', []) %}
+      <div class="flex items-start gap-4">
+        <div
+          class="w-10 h-10 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center flex-shrink-0 text-slate-400">
+          🏢
+        </div>
+        <div>
+          <h3 class="text-slate-200 font-bold text-sm">{{ entry.role or "Employee / Member" }}</h3>
+          <p class="text-slate-400 text-xs">{{ entry.company }}</p>
+          {% if entry.date_range %}
+          <p class="text-slate-500 text-xs mt-0.5">{{ entry.date_range }}</p>
+          {% endif %}
+        </div>
       </div>
       {% endfor %}
     </div>
   </div>
-  {% endfor %}
-</div>
-{% endif %}
+  {% endif %}
 
-{# ══════════════════════════════════════════════════ #}
-{# EXPERIENCE & PROFESSIONAL                         #}
-{# ══════════════════════════════════════════════════ #}
-{% if experience and experience.get('found') %}
-<h2 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3 fade-in-delay-3">Experience &amp; Professional</h2>
-<div class="glass-card p-6 mb-5 fade-in-delay-3">
-  <div class="section-header mb-4">
-    <div class="section-icon bg-blue-500/15 text-blue-400">💼</div>
-    <h2 class="section-title">Employment History</h2>
-  </div>
-  <div class="space-y-4">
-    {% for entry in experience.get('entries', []) %}
-    <div class="flex items-start gap-4">
-      <div class="w-10 h-10 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center flex-shrink-0 text-slate-400">
-        🏢
-      </div>
-      <div>
-        <h3 class="text-slate-200 font-bold text-sm">{{ entry.role or "Employee / Member" }}</h3>
-        <p class="text-slate-400 text-xs">{{ entry.company }}</p>
-        {% if entry.date_range %}
-        <p class="text-slate-500 text-xs mt-0.5">{{ entry.date_range }}</p>
+  {# ══════════════════════════════════════════════════ #}
+  {# GOOGLE ECOSYSTEM #}
+  {# ══════════════════════════════════════════════════ #}
+  {% if google_data and google_data.get('found') %}
+  <h2 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3 fade-in-delay-3">Google Ecosystem</h2>
+  <div class="glass-card p-6 mb-5 fade-in-delay-3">
+    <div class="section-header mb-4">
+      <div class="section-icon bg-red-500/15 text-red-400">G</div>
+      <h2 class="section-title">Google Activity</h2>
+    </div>
+
+    {% if google_data.get('active_apps') %}
+    <p class="text-slate-500 text-xs uppercase tracking-wider font-semibold mb-2">Active Apps</p>
+    <div class="flex gap-2 flex-wrap mb-4">
+      {% for app in google_data.active_apps %}
+      <span class="badge badge-slate">{{ app }}</span>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if google_data.get('maps_reviews') %}
+    <p class="text-slate-500 text-xs uppercase tracking-wider font-semibold mb-2">Maps Reviews</p>
+    <div class="space-y-3">
+      {% for review in google_data.maps_reviews %}
+      <div class="p-3 rounded-lg border border-slate-800 bg-black/20">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-slate-200 text-xs font-semibold">📍 {{ review.location }}</span>
+          {% if review.rating %}<span class="text-yellow-500 text-xs">{% for _ in range(review.rating) %}★{% endfor
+            %}</span>{% endif %}
+        </div>
+        {% if review.comment %}
+        <p class="text-slate-400 text-xs italic">"{{ review.comment }}"</p>
+        {% endif %}
+        {% if review.date %}
+        <p class="text-slate-600 text-xs mt-1">{{ review.date }}</p>
         {% endif %}
       </div>
+      {% endfor %}
     </div>
-    {% endfor %}
-  </div>
-</div>
-{% endif %}
-
-{# ══════════════════════════════════════════════════ #}
-{# GOOGLE ECOSYSTEM                                  #}
-{# ══════════════════════════════════════════════════ #}
-{% if google_data and google_data.get('found') %}
-<h2 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3 fade-in-delay-3">Google Ecosystem</h2>
-<div class="glass-card p-6 mb-5 fade-in-delay-3">
-  <div class="section-header mb-4">
-    <div class="section-icon bg-red-500/15 text-red-400">G</div>
-    <h2 class="section-title">Google Activity</h2>
-  </div>
-  
-  {% if google_data.get('active_apps') %}
-  <p class="text-slate-500 text-xs uppercase tracking-wider font-semibold mb-2">Active Apps</p>
-  <div class="flex gap-2 flex-wrap mb-4">
-    {% for app in google_data.active_apps %}
-    <span class="badge badge-slate">{{ app }}</span>
-    {% endfor %}
+    {% endif %}
   </div>
   {% endif %}
 
-  {% if google_data.get('maps_reviews') %}
-  <p class="text-slate-500 text-xs uppercase tracking-wider font-semibold mb-2">Maps Reviews</p>
-  <div class="space-y-3">
-    {% for review in google_data.maps_reviews %}
-    <div class="p-3 rounded-lg border border-slate-800 bg-black/20">
-      <div class="flex items-center justify-between mb-1">
-        <span class="text-slate-200 text-xs font-semibold">📍 {{ review.location }}</span>
-        {% if review.rating %}<span class="text-yellow-500 text-xs">{% for _ in range(review.rating) %}★{% endfor %}</span>{% endif %}
+  {# ══════════════════════════════════════════════════ #}
+  {# SECURITY: Breaches #}
+  {# ══════════════════════════════════════════════════ #}
+  <h2 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3 fade-in-delay-3">Security</h2>
+  <div class="mb-5 fade-in-delay-3">
+    {% if errors.get('xon') == 'rate_limited' %}
+    <div class="rounded-xl bg-amber-500/8 border border-amber-500/20 p-5 text-sm text-amber-400 flex items-start gap-3">
+      <span class="text-xl flex-shrink-0">⚠️</span>
+      <div>
+        <p class="font-semibold">XposedOrNot Rate Limited</p>
+        <p class="text-amber-500/70 text-xs mt-1">Breach detection temporarily unavailable due to API rate limits.</p>
       </div>
-      {% if review.comment %}
-      <p class="text-slate-400 text-xs italic">"{{ review.comment }}"</p>
-      {% endif %}
-      {% if review.date %}
-      <p class="text-slate-600 text-xs mt-1">{{ review.date }}</p>
-      {% endif %}
     </div>
-    {% endfor %}
-  </div>
-  {% endif %}
-</div>
-{% endif %}
+    {% elif breaches %}
+    {% set first_breach = breaches | sort(attribute='breach_date') | first %}
+    {% set last_breach = breaches | sort(attribute='breach_date') | last %}
+    <div class="breach-card">
+      <div class="flex items-start justify-between gap-4 mb-5">
+        <div class="flex items-center gap-3">
+          <div
+            class="w-12 h-12 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center text-xl flex-shrink-0">
+            🛡️</div>
+          <div>
+            <p class="text-slate-100 font-bold text-base">Data Breach Exposure</p>
+            <p class="text-slate-500 text-sm">Found in {{ breaches|length }} breach{{ 'es' if breaches|length != 1 else
+              '' }}</p>
+          </div>
+        </div>
+        <div class="text-red-400 flex-shrink-0">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          </svg>
+        </div>
+      </div>
 
-{# ══════════════════════════════════════════════════ #}
-{# SECURITY: Breaches                                #}
-{# ══════════════════════════════════════════════════ #}
-<h2 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3 fade-in-delay-3">Security</h2>
-<div class="mb-5 fade-in-delay-3">
-  {% if errors.get('xon') == 'rate_limited' %}
-  <div class="rounded-xl bg-amber-500/8 border border-amber-500/20 p-5 text-sm text-amber-400 flex items-start gap-3">
-    <span class="text-xl flex-shrink-0">⚠️</span>
-    <div>
-      <p class="font-semibold">XposedOrNot Rate Limited</p>
-      <p class="text-amber-500/70 text-xs mt-1">Breach detection temporarily unavailable due to API rate limits.</p>
-    </div>
-  </div>
-  {% elif breaches %}
-  {% set first_breach = breaches | sort(attribute='breach_date') | first %}
-  {% set last_breach  = breaches | sort(attribute='breach_date') | last %}
-  <div class="breach-card">
-    <div class="flex items-start justify-between gap-4 mb-5">
-      <div class="flex items-center gap-3">
-        <div class="w-12 h-12 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center text-xl flex-shrink-0">🛡️</div>
+      <div class="grid grid-cols-2 gap-4 mb-5">
+        {% if first_breach.get('breach_date') %}
         <div>
-          <p class="text-slate-100 font-bold text-base">Data Breach Exposure</p>
-          <p class="text-slate-500 text-sm">Found in {{ breaches|length }} breach{{ 'es' if breaches|length != 1 else '' }}</p>
+          <p class="service-meta-label">First Appeared</p>
+          <p class="text-slate-200 text-sm font-medium mt-1">{{ first_breach.breach_date[:10] }}</p>
         </div>
-      </div>
-      <div class="text-red-400 flex-shrink-0">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
-        </svg>
-      </div>
-    </div>
-
-    <div class="grid grid-cols-2 gap-4 mb-5">
-      {% if first_breach.get('breach_date') %}
-      <div>
-        <p class="service-meta-label">First Appeared</p>
-        <p class="text-slate-200 text-sm font-medium mt-1">{{ first_breach.breach_date[:10] }}</p>
-      </div>
-      {% endif %}
-      {% if last_breach.get('breach_date') %}
-      <div>
-        <p class="service-meta-label">Last Appeared</p>
-        <p class="text-slate-200 text-sm font-medium mt-1">{{ last_breach.breach_date[:10] }}</p>
-      </div>
-      {% endif %}
-    </div>
-
-    <div class="mb-5">
-      <p class="service-meta-label mb-3">Breach Sources</p>
-      <div class="flex flex-wrap gap-2">
-        {% for breach in breaches[:12] %}
-        <span class="breach-source-tag">{{ breach.get('domain') or breach.name | lower }}</span>
-        {% endfor %}
-        {% if breaches|length > 12 %}
-        <span class="text-slate-600 text-xs self-center">+{{ breaches|length - 12 }} more</span>
+        {% endif %}
+        {% if last_breach.get('breach_date') %}
+        <div>
+          <p class="service-meta-label">Last Appeared</p>
+          <p class="text-slate-200 text-sm font-medium mt-1">{{ last_breach.breach_date[:10] }}</p>
+        </div>
         {% endif %}
       </div>
-    </div>
 
-    <a href="/export/{{ search_id }}/pdf" class="flex items-center justify-center gap-2 w-full py-3 rounded-xl border border-slate-700 text-slate-300 text-sm font-medium hover:bg-white/5 hover:border-slate-600 transition-all">
-      View Breach Report
-    </a>
-  </div>
-  {% else %}
-  <div class="glass-card p-8 text-center">
-    <div class="text-4xl mb-3">✅</div>
-    <p class="text-emerald-400 font-semibold text-sm">No data breaches found</p>
-    <p class="text-slate-600 text-xs mt-1">This email has not appeared in any known data breach.</p>
-  </div>
-  {% endif %}
-</div>
-
-{# ══════════════════════════════════════════════════ #}
-{# INTELLIGENCE: Domain + Gravatar                   #}
-{# ══════════════════════════════════════════════════ #}
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5 fade-in-delay-3">
-  <div class="glass-card p-6">
-    <div class="section-header">
-      <div class="section-icon bg-cyan-500/15 text-cyan-400">🔍</div>
-      <h2 class="section-title">Domain Intelligence</h2>
-      {% if domain %}<span class="mono text-slate-600 text-xs ml-auto">{{ domain.get('domain', '') }}</span>{% endif %}
-    </div>
-    {% if domain %}
-    <div class="space-y-1">
-      {% macro domain_row(label, value, is_code=False) %}
-      {% if value %}
-      <div class="flex items-start gap-2 py-2.5 border-b border-slate-800/60 last:border-0">
-        <span class="text-slate-500 text-xs w-28 flex-shrink-0 mt-0.5">{{ label }}</span>
-        {% if is_code %}
-        <span class="mono text-xs text-cyan-300 break-words">{{ value }}</span>
-        {% else %}
-        <span class="text-slate-300 text-xs break-words">{{ value }}</span>
-        {% endif %}
-      </div>
-      {% endif %}
-      {% endmacro %}
-      {{ domain_row('Registrar', domain.get('registrar')) }}
-      {{ domain_row('Created', domain.get('creation_date')) }}
-      {{ domain_row('Expires', domain.get('expiration_date')) }}
-      {{ domain_row('MX Records', domain.get('mx_records', [])|join(', ')) }}
-      {{ domain_row('SPF', domain.get('spf_record'), is_code=True) }}
-      {{ domain_row('DMARC', domain.get('dmarc_record'), is_code=True) }}
-      {% set subdomains = domain.get('subdomains', []) %}
-      {% if subdomains %}
-      <div class="pt-3" x-data="{ expanded: false }">
-        <div class="flex items-center justify-between">
-          <span class="text-slate-500 text-xs">Subdomains</span>
-          <button @click="expanded = !expanded" class="text-xs text-indigo-400 hover:text-indigo-300 transition-colors">
-            <span x-show="!expanded">Show {{ subdomains|length }} →</span>
-            <span x-show="expanded">Hide ↑</span>
-          </button>
-        </div>
-        <div x-show="expanded" x-transition class="mt-2 space-y-1 max-h-40 overflow-y-auto pr-1">
-          {% for sub in subdomains %}
-          <div class="mono text-xs text-cyan-400/80 py-1 border-b border-slate-800/40 last:border-0">{{ sub }}</div>
+      <div class="mb-5">
+        <p class="service-meta-label mb-3">Breach Sources</p>
+        <div class="flex flex-wrap gap-2">
+          {% for breach in breaches[:12] %}
+          <span class="breach-source-tag">{{ breach.get('domain') or breach.name | lower }}</span>
           {% endfor %}
+          {% if breaches|length > 12 %}
+          <span class="text-slate-600 text-xs self-center">+{{ breaches|length - 12 }} more</span>
+          {% endif %}
         </div>
       </div>
-      {% endif %}
-      <div class="pt-3 flex gap-2">
-        <span class="badge {% if domain.get('spf_record') %}badge-found{% else %}badge-not-found{% endif %}">SPF {% if domain.get('spf_record') %}✓{% else %}✗{% endif %}</span>
-        <span class="badge {% if domain.get('dmarc_record') %}badge-found{% else %}badge-not-found{% endif %}">DMARC {% if domain.get('dmarc_record') %}✓{% else %}✗{% endif %}</span>
-        <span class="badge {% if domain.get('mx_records') %}badge-found{% else %}badge-not-found{% endif %}">MX {% if domain.get('mx_records') %}✓{% else %}✗{% endif %}</span>
-      </div>
+
+      <a href="/export/{{ search_id }}/pdf"
+        class="flex items-center justify-center gap-2 w-full py-3 rounded-xl border border-slate-700 text-slate-300 text-sm font-medium hover:bg-white/5 hover:border-slate-600 transition-all">
+        View Breach Report
+      </a>
     </div>
     {% else %}
-    <p class="text-slate-600 text-sm text-center py-6">Domain data not available.</p>
+    <div class="glass-card p-8 text-center">
+      <div class="text-4xl mb-3">✅</div>
+      <p class="text-emerald-400 font-semibold text-sm">No data breaches found</p>
+      <p class="text-slate-600 text-xs mt-1">This email has not appeared in any known data breach.</p>
+    </div>
     {% endif %}
   </div>
 
-  <div class="glass-card p-6">
-    <div class="section-header">
-      <div class="section-icon bg-emerald-500/15 text-emerald-400">👤</div>
-      <h2 class="section-title">Public Profile</h2>
-    </div>
-    {% if gravatar.get('found') %}
-    <div class="flex flex-col items-center text-center py-4 gap-4">
-      <img src="{{ gravatar.avatar_url }}" alt="Gravatar" class="w-24 h-24 rounded-2xl border-2 border-emerald-500/30 shadow-xl shadow-emerald-500/10"/>
-      {% if gravatar.get('display_name') %}
-      <div>
-        <h3 class="text-lg font-bold text-slate-100">{{ gravatar.display_name }}</h3>
-        <span class="badge badge-found mt-1">Gravatar Profile Found</span>
+  {# ══════════════════════════════════════════════════ #}
+  {# INTELLIGENCE: Domain + Gravatar #}
+  {# ══════════════════════════════════════════════════ #}
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5 fade-in-delay-3">
+    <div class="glass-card p-6">
+      <div class="section-header">
+        <div class="section-icon bg-cyan-500/15 text-cyan-400">🔍</div>
+        <h2 class="section-title">Domain Intelligence</h2>
+        {% if domain %}<span class="mono text-slate-600 text-xs ml-auto">{{ domain.get('domain', '') }}</span>{% endif
+        %}
+      </div>
+      {% if domain %}
+      <div class="space-y-1">
+        {% macro domain_row(label, value, is_code=False) %}
+        {% if value %}
+        <div class="flex items-start gap-2 py-2.5 border-b border-slate-800/60 last:border-0">
+          <span class="text-slate-500 text-xs w-28 flex-shrink-0 mt-0.5">{{ label }}</span>
+          {% if is_code %}
+          <span class="mono text-xs text-cyan-300 break-words">{{ value }}</span>
+          {% else %}
+          <span class="text-slate-300 text-xs break-words">{{ value }}</span>
+          {% endif %}
+        </div>
+        {% endif %}
+        {% endmacro %}
+        {{ domain_row('Registrar', domain.get('registrar')) }}
+        {{ domain_row('Created', domain.get('creation_date')) }}
+        {{ domain_row('Expires', domain.get('expiration_date')) }}
+        {{ domain_row('MX Records', domain.get('mx_records', [])|join(', ')) }}
+        {{ domain_row('SPF', domain.get('spf_record'), is_code=True) }}
+        {{ domain_row('DMARC', domain.get('dmarc_record'), is_code=True) }}
+        {% set subdomains = domain.get('subdomains', []) %}
+        {% if subdomains %}
+        <div class="pt-3" x-data="{ expanded: false }">
+          <div class="flex items-center justify-between">
+            <span class="text-slate-500 text-xs">Subdomains</span>
+            <button @click="expanded = !expanded"
+              class="text-xs text-indigo-400 hover:text-indigo-300 transition-colors">
+              <span x-show="!expanded">Show {{ subdomains|length }} →</span>
+              <span x-show="expanded">Hide ↑</span>
+            </button>
+          </div>
+          <div x-show="expanded" x-transition class="mt-2 space-y-1 max-h-40 overflow-y-auto pr-1">
+            {% for sub in subdomains %}
+            <div class="mono text-xs text-cyan-400/80 py-1 border-b border-slate-800/40 last:border-0">{{ sub }}</div>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+        <div class="pt-3 flex gap-2">
+          <span class="badge {% if domain.get('spf_record') %}badge-found{% else %}badge-not-found{% endif %}">SPF {% if
+            domain.get('spf_record') %}✓{% else %}✗{% endif %}</span>
+          <span class="badge {% if domain.get('dmarc_record') %}badge-found{% else %}badge-not-found{% endif %}">DMARC
+            {% if domain.get('dmarc_record') %}✓{% else %}✗{% endif %}</span>
+          <span class="badge {% if domain.get('mx_records') %}badge-found{% else %}badge-not-found{% endif %}">MX {% if
+            domain.get('mx_records') %}✓{% else %}✗{% endif %}</span>
+        </div>
       </div>
       {% else %}
-      <span class="badge badge-found">Gravatar Avatar Found</span>
-      {% endif %}
-      {% if gravatar.get('profile_url') %}
-      <a href="{{ gravatar.profile_url }}" target="_blank" rel="noopener noreferrer" class="btn-secondary">View Gravatar Profile →</a>
+      <p class="text-slate-600 text-sm text-center py-6">Domain data not available.</p>
       {% endif %}
     </div>
-    {% else %}
-    <div class="text-center py-10">
-      <div class="w-20 h-20 mx-auto rounded-2xl bg-slate-800/50 flex items-center justify-center text-4xl mb-4">👻</div>
-      <p class="text-slate-400 font-semibold text-sm">No Gravatar Profile</p>
-      <p class="text-slate-600 text-xs mt-1">No Gravatar associated with this email.</p>
+
+    <div class="glass-card p-6">
+      <div class="section-header">
+        <div class="section-icon bg-emerald-500/15 text-emerald-400">👤</div>
+        <h2 class="section-title">Public Profile</h2>
+      </div>
+      {% if gravatar.get('found') %}
+      <div class="flex flex-col items-center text-center py-4 gap-4">
+        <img src="{{ gravatar.avatar_url }}" alt="Gravatar"
+          class="w-24 h-24 rounded-2xl border-2 border-emerald-500/30 shadow-xl shadow-emerald-500/10" />
+        {% if gravatar.get('display_name') %}
+        <div>
+          <h3 class="text-lg font-bold text-slate-100">{{ gravatar.display_name }}</h3>
+          <span class="badge badge-found mt-1">Gravatar Profile Found</span>
+        </div>
+        {% else %}
+        <span class="badge badge-found">Gravatar Avatar Found</span>
+        {% endif %}
+        {% if gravatar.get('profile_url') %}
+        <a href="{{ gravatar.profile_url }}" target="_blank" rel="noopener noreferrer" class="btn-secondary">View
+          Gravatar Profile →</a>
+        {% endif %}
+      </div>
+      {% else %}
+      <div class="text-center py-10">
+        <div class="w-20 h-20 mx-auto rounded-2xl bg-slate-800/50 flex items-center justify-center text-4xl mb-4">👻
+        </div>
+        <p class="text-slate-400 font-semibold text-sm">No Gravatar Profile</p>
+        <p class="text-slate-600 text-xs mt-1">No Gravatar associated with this email.</p>
+      </div>
+      {% endif %}
+      <hr class="gradient-divider" />
+      <div class="space-y-2">
+        <p class="text-slate-600 text-xs uppercase tracking-wider font-semibold mb-3">Quick Links</p>
+        {% set encoded_email = email | urlencode %}
+        <a href="https://www.google.com/search?q=%22{{ email }}%22" target="_blank" rel="noopener noreferrer"
+          class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 transition-colors text-sm text-slate-400 hover:text-slate-200">
+          <span class="text-base">🔎</span> Google Search
+        </a>
+        <a href="https://twitter.com/search?q={{ encoded_email }}" target="_blank" rel="noopener noreferrer"
+          class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 transition-colors text-sm text-slate-400 hover:text-slate-200">
+          <span class="text-base">𝕏</span> Search on X/Twitter
+        </a>
+        <a href="https://www.linkedin.com/search/results/people/?keywords={{ encoded_email }}" target="_blank"
+          rel="noopener noreferrer"
+          class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 transition-colors text-sm text-slate-400 hover:text-slate-200">
+          <span class="text-base">💼</span> LinkedIn Search
+        </a>
+      </div>
+    </div>
+  </div>
+
+  {# ══════════════════════════════════════════════════ #}
+  {# AGGREGATION: Dates + Locations + Links #}
+  {# ══════════════════════════════════════════════════ #}
+  {% if all_dates or all_locations or all_links %}
+  <div class="grid grid-cols-1 {% if all_dates and all_links %}lg:grid-cols-2{% endif %} gap-5 mb-5 fade-in-delay-3">
+
+    {% if all_dates %}
+    <div class="agg-card">
+      <div class="agg-card-header">
+        <div class="agg-card-icon bg-blue-500/15 text-blue-400">📅</div>
+        <span class="agg-card-title">Dates</span>
+      </div>
+      {% for d in all_dates %}
+      <div class="agg-row">
+        <span class="agg-row-label">{{ d.label }}:</span>
+        <span class="agg-row-value">{{ d.value }}</span>
+        <span class="service-source-badge">
+          <img src="{{ svc_icon(d.domain, 24) }}" alt="{{ d.service }}" onerror="this.style.display='none'" />
+          {{ d.service }}
+        </span>
+      </div>
+      {% endfor %}
     </div>
     {% endif %}
-    <hr class="gradient-divider" />
-    <div class="space-y-2">
-      <p class="text-slate-600 text-xs uppercase tracking-wider font-semibold mb-3">Quick Links</p>
-      {% set encoded_email = email | urlencode %}
-      <a href="https://www.google.com/search?q=%22{{ email }}%22" target="_blank" rel="noopener noreferrer"
-         class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 transition-colors text-sm text-slate-400 hover:text-slate-200">
-        <span class="text-base">🔎</span> Google Search
-      </a>
-      <a href="https://twitter.com/search?q={{ encoded_email }}" target="_blank" rel="noopener noreferrer"
-         class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 transition-colors text-sm text-slate-400 hover:text-slate-200">
-        <span class="text-base">𝕏</span> Search on X/Twitter
-      </a>
-      <a href="https://www.linkedin.com/search/results/people/?keywords={{ encoded_email }}" target="_blank" rel="noopener noreferrer"
-         class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 transition-colors text-sm text-slate-400 hover:text-slate-200">
-        <span class="text-base">💼</span> LinkedIn Search
-      </a>
-    </div>
-  </div>
-</div>
 
-{# ══════════════════════════════════════════════════ #}
-{# AGGREGATION: Dates + Locations + Links            #}
-{# ══════════════════════════════════════════════════ #}
-{% if all_dates or all_locations or all_links %}
-<div class="grid grid-cols-1 {% if all_dates and all_links %}lg:grid-cols-2{% endif %} gap-5 mb-5 fade-in-delay-3">
-
-  {% if all_dates %}
-  <div class="agg-card">
-    <div class="agg-card-header">
-      <div class="agg-card-icon bg-blue-500/15 text-blue-400">📅</div>
-      <span class="agg-card-title">Dates</span>
-    </div>
-    {% for d in all_dates %}
-    <div class="agg-row">
-      <span class="agg-row-label">{{ d.label }}:</span>
-      <span class="agg-row-value">{{ d.value }}</span>
-      <span class="service-source-badge">
-        <img src="{{ svc_icon(d.domain, 24) }}" alt="{{ d.service }}" onerror="this.style.display='none'"/>
-        {{ d.service }}
-      </span>
-    </div>
-    {% endfor %}
-  </div>
-  {% endif %}
-
-  {% if all_links %}
-  <div class="agg-card">
-    <div class="agg-card-header">
-      <div class="agg-card-icon bg-indigo-500/15 text-indigo-400">🔗</div>
-      <span class="agg-card-title">Links</span>
-    </div>
-    {% for link in all_links %}
-    <div class="agg-row">
-      <a href="{{ link.url }}" target="_blank" rel="noopener noreferrer"
-         class="agg-row-value text-indigo-400 hover:text-indigo-300 transition-colors truncate text-xs mono">{{ link.url }}</a>
-      <span class="service-source-badge flex-shrink-0">
-        <img src="{{ svc_icon(link.domain, 24) }}" alt="{{ link.service }}" onerror="this.style.display='none'"/>
-        {{ link.service }}
-      </span>
-    </div>
-    {% endfor %}
-  </div>
-  {% endif %}
-</div>
-
-{% if all_locations %}
-<div class="agg-card mb-5 fade-in-delay-3">
-  <div class="agg-card-header">
-    <div class="agg-card-icon bg-emerald-500/15 text-emerald-400">📍</div>
-    <span class="agg-card-title">Locations</span>
-  </div>
-  <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
-    {% for loc in all_locations %}
-    <div class="agg-row">
-      <span class="agg-row-value">{{ loc.value }}</span>
-      <span class="service-source-badge">
-        <img src="{{ svc_icon(loc.domain, 24) }}" alt="{{ loc.service }}" onerror="this.style.display='none'"/>
-        {{ loc.service }}
-      </span>
-    </div>
-    {% endfor %}
-  </div>
-</div>
-{% endif %}
-{% endif %}
-
-{# ══════════════════════════════════════════════════ #}
-{# WEB MENTIONS                                      #}
-{# ══════════════════════════════════════════════════ #}
-<div class="glass-card p-6 mb-5 fade-in-delay-3">
-  <div class="section-header mb-4">
-    <div class="section-icon bg-fuchsia-500/15 text-fuchsia-400">🌐</div>
-    <h2 class="section-title">Web Mentions</h2>
-    <span class="section-count">{{ dorks|length }}</span>
-    <span class="text-slate-600 text-xs ml-2">via Mojeek search dorks</span>
-  </div>
-  {% if dorks %}
-  {% set source_icons = {'linkedin': '💼', 'github': '🐙', 'pastebin': '📋', 'reddit': '🔴', 'general': '🔎'} %}
-  <div class="space-y-3">
-    {% for dork in dorks %}
-    <a href="{{ dork.url }}" target="_blank" rel="noopener noreferrer"
-       class="flex items-start gap-3 p-3 rounded-xl hover:bg-white/5 transition-colors border border-slate-800/50 hover:border-slate-700 group">
-      <span class="text-xl flex-shrink-0 mt-0.5">{{ source_icons.get(dork.source, '🔗') }}</span>
-      <div class="min-w-0 flex-1">
-        <p class="text-slate-200 text-sm font-medium group-hover:text-indigo-300 transition-colors truncate">{{ dork.title }}</p>
-        {% if dork.snippet %}<p class="text-slate-500 text-xs mt-0.5 line-clamp-2">{{ dork.snippet }}</p>{% endif %}
-        <p class="mono text-slate-700 text-xs mt-1 truncate">{{ dork.url }}</p>
+    {% if all_links %}
+    <div class="agg-card">
+      <div class="agg-card-header">
+        <div class="agg-card-icon bg-indigo-500/15 text-indigo-400">🔗</div>
+        <span class="agg-card-title">Links</span>
       </div>
-      <span class="badge badge-slate flex-shrink-0 capitalize">{{ dork.source }}</span>
-    </a>
+      {% for link in all_links %}
+      <div class="agg-row">
+        <a href="{{ link.url }}" target="_blank" rel="noopener noreferrer"
+          class="agg-row-value text-indigo-400 hover:text-indigo-300 transition-colors truncate text-xs mono">{{
+          link.url }}</a>
+        <span class="service-source-badge flex-shrink-0">
+          <img src="{{ svc_icon(link.domain, 24) }}" alt="{{ link.service }}" onerror="this.style.display='none'" />
+          {{ link.service }}
+        </span>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+
+  {% if all_locations %}
+  <div class="agg-card mb-5 fade-in-delay-3">
+    <div class="agg-card-header">
+      <div class="agg-card-icon bg-emerald-500/15 text-emerald-400">📍</div>
+      <span class="agg-card-title">Locations</span>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
+      {% for loc in all_locations %}
+      <div class="agg-row">
+        <span class="agg-row-value">{{ loc.value }}</span>
+        <span class="service-source-badge">
+          <img src="{{ svc_icon(loc.domain, 24) }}" alt="{{ loc.service }}" onerror="this.style.display='none'" />
+          {{ loc.service }}
+        </span>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+  {% endif %}
+
+  {# ══════════════════════════════════════════════════ #}
+  {# WEB MENTIONS #}
+  {# ══════════════════════════════════════════════════ #}
+  <div class="glass-card p-6 mb-5 fade-in-delay-3">
+    <div class="section-header mb-4">
+      <div class="section-icon bg-fuchsia-500/15 text-fuchsia-400">🌐</div>
+      <h2 class="section-title">Web Mentions</h2>
+      <span class="section-count">{{ dorks|length }}</span>
+      <span class="text-slate-600 text-xs ml-2">via Mojeek search dorks</span>
+    </div>
+    {% if dorks %}
+    {% set source_icons = {'linkedin': '💼', 'github': '🐙', 'pastebin': '📋', 'reddit': '🔴', 'general': '🔎'} %}
+    <div class="space-y-3">
+      {% for dork in dorks %}
+      <a href="{{ dork.url }}" target="_blank" rel="noopener noreferrer"
+        class="flex items-start gap-3 p-3 rounded-xl hover:bg-white/5 transition-colors border border-slate-800/50 hover:border-slate-700 group">
+        <span class="text-xl flex-shrink-0 mt-0.5">{{ source_icons.get(dork.source, '🔗') }}</span>
+        <div class="min-w-0 flex-1">
+          <p class="text-slate-200 text-sm font-medium group-hover:text-indigo-300 transition-colors truncate">{{
+            dork.title }}</p>
+          {% if dork.snippet %}<p class="text-slate-500 text-xs mt-0.5 line-clamp-2">{{ dork.snippet }}</p>{% endif %}
+          <p class="mono text-slate-700 text-xs mt-1 truncate">{{ dork.url }}</p>
+        </div>
+        <span class="badge badge-slate flex-shrink-0 capitalize">{{ dork.source }}</span>
+      </a>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-8">
+      <div class="text-4xl mb-3">🔇</div>
+      <p class="text-slate-500 font-semibold text-sm">No public web mentions found</p>
+      <p class="text-slate-600 text-xs mt-1">This email did not appear in public search results for the checked
+        platforms.</p>
+    </div>
+    {% endif %}
+  </div>
+
+  {% endif %} {# end completed check #}
+  {% endblock %}
+
+  {% block scripts %}
+  {% if status == 'completed' and results %}
+  {% set risk = results.get('risk', {}) %}
+  {% set breaches = results.get('breaches', []) %}
+  {% set accounts = results.get('accounts', []) %}
+  {% set github = results.get('github', {}) %}
+  {% set gravatar = results.get('gravatar', {}) %}
+  {% set found_accounts = accounts | selectattr('exists') | list %}
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      {% if risk %}
+      initRiskGauge({{ risk.get('score', 0) }}, '{{ risk.get('color', 'emerald') }}');
+    {% endif %}
+
+    initBreachChart(
+      {{ breaches| length }},
+      {{ found_accounts| length }},
+      {{ 'true' if results.get('domain') else 'false' }},
+      {{ 'true' if results.get('gravatar', {}).get('found') else 'false' }}
+    );
+
+    {% if found_accounts %}
+    const categories = {};
+    {% for acc in found_accounts %}
+    categories['{{ acc.category }}'] = (categories['{{ acc.category }}'] || 0) + 1;
     {% endfor %}
-  </div>
-  {% else %}
-  <div class="text-center py-8">
-    <div class="text-4xl mb-3">🔇</div>
-    <p class="text-slate-500 font-semibold text-sm">No public web mentions found</p>
-    <p class="text-slate-600 text-xs mt-1">This email did not appear in public search results for the checked platforms.</p>
-  </div>
-  {% endif %}
-</div>
+    initAccountsChart(categories);
+    {% endif %}
 
-{% endif %} {# end completed check #}
-{% endblock %}
-
-{% block scripts %}
-{% if status == 'completed' and results %}
-{% set risk = results.get('risk', {}) %}
-{% set breaches = results.get('breaches', []) %}
-{% set accounts = results.get('accounts', []) %}
-{% set github = results.get('github', {}) %}
-{% set gravatar = results.get('gravatar', {}) %}
-{% set found_accounts = accounts | selectattr('exists') | list %}
-
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  {% if risk %}
-  initRiskGauge({{ risk.get('score', 0) }}, '{{ risk.get('color', 'emerald') }}');
-  {% endif %}
-
-  initBreachChart(
-    {{ breaches|length }},
-    {{ found_accounts|length }},
-    {{ 'true' if results.get('domain') else 'false' }},
-    {{ 'true' if results.get('gravatar', {}).get('found') else 'false' }}
-  );
-
-  {% if found_accounts %}
-  const categories = {};
-  {% for acc in found_accounts %}
-  categories['{{ acc.category }}'] = (categories['{{ acc.category }}'] || 0) + 1;
-  {% endfor %}
-  initAccountsChart(categories);
-  {% endif %}
-
-  // D3 connection graph
-  const graphNodes = [
-    { id: 'email', label: '{{ email }}', type: 'email' },
-    {% if results.get('domain') %}
+    // D3 connection graph
+    const graphNodes = [
+      { id: 'email', label: '{{ email }}', type: 'email' },
+      {% if results.get('domain') %}
     { id: 'domain_{{ results.get("domain", {}).get("domain", "") }}', label: '{{ results.get("domain", {}).get("domain", "") }}', type: 'domain' },
     {% endif %}
     {% if results.get('github', {}).get('found') %}
     { id: 'github_node', label: 'GitHub: @{{ results.get("github", {}).get("username", "") }}', type: 'account' },
     {% endif %}
-    {% for breach in breaches[:10] %}
+    {% for breach in breaches[: 10] %}
     { id: 'breach_{{ loop.index }}', label: '{{ breach.name }}', type: 'breach' },
     {% endfor %}
-    {% for acc in found_accounts[:12] %}
+    {% for acc in found_accounts[: 12] %}
     { id: 'acc_{{ loop.index }}', label: '{{ acc.service }}', type: 'account' },
     {% endfor %}
   ];
-  const graphLinks = [
-    {% if results.get('domain') %}
+    const graphLinks = [
+      {% if results.get('domain') %}
     { source: 'email', target: 'domain_{{ results.get("domain", {}).get("domain", "") }}' },
     {% endif %}
     {% if results.get('github', {}).get('found') %}
     { source: 'email', target: 'github_node' },
     {% endif %}
-    {% for breach in breaches[:10] %}
+    {% for breach in breaches[: 10] %}
     { source: 'email', target: 'breach_{{ loop.index }}' },
     {% endfor %}
-    {% for acc in found_accounts[:12] %}
+    {% for acc in found_accounts[: 12] %}
     { source: 'email', target: 'acc_{{ loop.index }}' },
     {% endfor %}
   ];
-  if (graphNodes.length > 1) {
-    initConnectionGraph(graphNodes, graphLinks);
-  }
+    if (graphNodes.length > 1) {
+      initConnectionGraph(graphNodes, graphLinks);
+    }
 });
-</script>
-{% endif %}
-{% endblock %}
+  </script>
+  {% endif %}
+  {% endblock %}
