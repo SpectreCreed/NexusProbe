@@ -107,7 +107,7 @@ acc.service, 'domain': get_domain(acc.service)}) %}{% endfor %}
 {% elif status == 'failed' %}
 <div class="max-w-2xl mx-auto mt-8">
   <div class="glass-card p-8 text-center">
-    <div class="text-5xl mb-4">❌</div>
+    <div class="mb-4 text-red-500"><i data-lucide="x-circle" class="w-12 h-12 mx-auto"></i></div>
     <h2 class="text-xl font-bold text-red-400 mb-2">Scan Failed</h2>
     <p class="text-slate-400 text-sm">{{ results.get('error_message', 'Unknown error occurred.') }}</p>
     <a href="/" class="btn-secondary mt-6 inline-flex">← New Search</a>
@@ -165,7 +165,7 @@ acc.service, 'domain': get_domain(acc.service)}) %}{% endfor %}
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-5 fade-in-delay-1">
   <div class="glass-card p-6 flex flex-col items-center">
     <div class="section-header w-full">
-      <div class="section-icon bg-amber-500/15 text-amber-400">⚠️</div>
+      <div class="section-icon bg-amber-500/15 text-amber-400"><i data-lucide="alert-triangle" class="w-5 h-5"></i></div>
       <h2 class="section-title">Risk Score</h2>
       {% if risk %}<span class="badge risk-badge-{{ risk.get('color', 'emerald') }} ml-auto">{{ risk.get('label',
         'Unknown') }}</span>{% endif %}
@@ -194,7 +194,7 @@ acc.service, 'domain': get_domain(acc.service)}) %}{% endfor %}
 
   <div class="glass-card p-6 lg:col-span-2">
     <div class="section-header">
-      <div class="section-icon bg-indigo-500/15 text-indigo-400">📊</div>
+      <div class="section-icon bg-indigo-500/15 text-indigo-400"><i data-lucide="bar-chart-2" class="w-5 h-5"></i></div>
       <h2 class="section-title">Exposure Overview</h2>
     </div>
     <div class="h-48 flex items-center justify-center">
@@ -202,7 +202,7 @@ acc.service, 'domain': get_domain(acc.service)}) %}{% endfor %}
       <canvas id="exposure-chart"></canvas>
       {% else %}
       <div class="text-center text-slate-600">
-        <div class="text-4xl mb-2">🔒</div>
+        <div class="mb-2"><i data-lucide="lock" class="w-10 h-10 mx-auto"></i></div>
         <p class="text-sm">No significant exposures found</p>
       </div>
       {% endif %}
@@ -233,7 +233,7 @@ acc.service, 'domain': get_domain(acc.service)}) %}{% endfor %}
 {% if all_avatars %}
 <div class="glass-card p-6 mb-5 fade-in-delay-1">
   <div class="section-header mb-4">
-    <div class="section-icon bg-violet-500/15 text-violet-400">🖼️</div>
+    <div class="section-icon bg-violet-500/15 text-violet-400"><i data-lucide="image" class="w-5 h-5"></i></div>
     <h2 class="section-title">Profile Pictures</h2>
     <span class="section-count">{{ all_avatars|length }}</span>
   </div>
@@ -255,7 +255,7 @@ acc.service, 'domain': get_domain(acc.service)}) %}{% endfor %}
 {# ══════════════════════════════════════════════════ #}
 <div class="glass-card p-6 mb-5 fade-in-delay-1">
   <div class="section-header mb-4">
-    <div class="section-icon bg-violet-500/15 text-violet-400">🕸️</div>
+    <div class="section-icon bg-violet-500/15 text-violet-400"><i data-lucide="network" class="w-5 h-5"></i></div>
     <h2 class="section-title">Connection Graph</h2>
     <span class="text-slate-600 text-xs ml-auto">Hover nodes for details</span>
   </div>
@@ -288,7 +288,7 @@ acc.service, 'domain': get_domain(acc.service)}) %}{% endfor %}
   {# Left: Summary card #}
   <div class="accounts-summary-card">
     <div class="service-card-header">
-      <div class="agg-card-icon bg-indigo-500/15 text-indigo-400">👤</div>
+      <div class="agg-card-icon bg-indigo-500/15 text-indigo-400"><i data-lucide="user" class="w-5 h-5"></i></div>
       <span class="service-label">Registered Accounts</span>
     </div>
     <div>
@@ -543,7 +543,7 @@ acc.service, 'domain': get_domain(acc.service)}) %}{% endfor %}
     Professional</h2>
   <div class="glass-card p-6 mb-5 fade-in-delay-3">
     <div class="section-header mb-4">
-      <div class="section-icon bg-blue-500/15 text-blue-400">💼</div>
+      <div class="section-icon bg-blue-500/15 text-blue-400"><i data-lucide="briefcase" class="w-5 h-5"></i></div>
       <h2 class="section-title">Employment History</h2>
     </div>
     <div class="space-y-4">
@@ -551,7 +551,7 @@ acc.service, 'domain': get_domain(acc.service)}) %}{% endfor %}
       <div class="flex items-start gap-4">
         <div
           class="w-10 h-10 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center flex-shrink-0 text-slate-400">
-          🏢
+          <i data-lucide="building" class="w-5 h-5"></i>
         </div>
         <div>
           <h3 class="text-slate-200 font-bold text-sm">{{ entry.role or "Employee / Member" }}</h3>
@@ -592,7 +592,7 @@ acc.service, 'domain': get_domain(acc.service)}) %}{% endfor %}
       {% for review in google_data.maps_reviews %}
       <div class="p-3 rounded-lg border border-slate-800 bg-black/20">
         <div class="flex items-center justify-between mb-1">
-          <span class="text-slate-200 text-xs font-semibold">📍 {{ review.location }}</span>
+          <span class="text-slate-200 text-xs font-semibold flex items-center gap-1"><i data-lucide="map-pin" class="w-3 h-3"></i> {{ review.location }}</span>
           {% if review.rating %}<span class="text-yellow-500 text-xs">{% for _ in range(review.rating) %}★{% endfor
             %}</span>{% endif %}
         </div>
@@ -616,7 +616,7 @@ acc.service, 'domain': get_domain(acc.service)}) %}{% endfor %}
   <div class="mb-5 fade-in-delay-3">
     {% if errors.get('xon') == 'rate_limited' %}
     <div class="rounded-xl bg-amber-500/8 border border-amber-500/20 p-5 text-sm text-amber-400 flex items-start gap-3">
-      <span class="text-xl flex-shrink-0">⚠️</span>
+      <span class="flex-shrink-0"><i data-lucide="alert-triangle" class="w-6 h-6"></i></span>
       <div>
         <p class="font-semibold">XposedOrNot Rate Limited</p>
         <p class="text-amber-500/70 text-xs mt-1">Breach detection temporarily unavailable due to API rate limits.</p>
@@ -630,7 +630,7 @@ acc.service, 'domain': get_domain(acc.service)}) %}{% endfor %}
         <div class="flex items-center gap-3">
           <div
             class="w-12 h-12 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center text-xl flex-shrink-0">
-            🛡️</div>
+            <i data-lucide="shield" class="w-6 h-6"></i></div>
           <div>
             <p class="text-slate-100 font-bold text-base">Data Breach Exposure</p>
             <p class="text-slate-500 text-sm">Found in {{ breaches|length }} breach{{ 'es' if breaches|length != 1 else
@@ -679,7 +679,7 @@ acc.service, 'domain': get_domain(acc.service)}) %}{% endfor %}
     </div>
     {% else %}
     <div class="glass-card p-8 text-center">
-      <div class="text-4xl mb-3">✅</div>
+      <div class="mb-3 text-emerald-400"><i data-lucide="check-circle" class="w-10 h-10 mx-auto"></i></div>
       <p class="text-emerald-400 font-semibold text-sm">No data breaches found</p>
       <p class="text-slate-600 text-xs mt-1">This email has not appeared in any known data breach.</p>
     </div>
@@ -692,7 +692,7 @@ acc.service, 'domain': get_domain(acc.service)}) %}{% endfor %}
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5 fade-in-delay-3">
     <div class="glass-card p-6">
       <div class="section-header">
-        <div class="section-icon bg-cyan-500/15 text-cyan-400">🔍</div>
+        <div class="section-icon bg-cyan-500/15 text-cyan-400"><i data-lucide="search" class="w-5 h-5"></i></div>
         <h2 class="section-title">Domain Intelligence</h2>
         {% if domain %}<span class="mono text-slate-600 text-xs ml-auto">{{ domain.get('domain', '') }}</span>{% endif
         %}
@@ -751,7 +751,7 @@ acc.service, 'domain': get_domain(acc.service)}) %}{% endfor %}
 
     <div class="glass-card p-6">
       <div class="section-header">
-        <div class="section-icon bg-emerald-500/15 text-emerald-400">👤</div>
+        <div class="section-icon bg-emerald-500/15 text-emerald-400"><i data-lucide="user" class="w-5 h-5"></i></div>
         <h2 class="section-title">Public Profile</h2>
       </div>
       {% if gravatar.get('found') %}
@@ -773,8 +773,7 @@ acc.service, 'domain': get_domain(acc.service)}) %}{% endfor %}
       </div>
       {% else %}
       <div class="text-center py-10">
-        <div class="w-20 h-20 mx-auto rounded-2xl bg-slate-800/50 flex items-center justify-center text-4xl mb-4">👻
-        </div>
+        <div class="w-20 h-20 mx-auto rounded-2xl bg-slate-800/50 flex items-center justify-center mb-4"><i data-lucide="ghost" class="w-10 h-10 text-slate-500"></i></div>
         <p class="text-slate-400 font-semibold text-sm">No Gravatar Profile</p>
         <p class="text-slate-600 text-xs mt-1">No Gravatar associated with this email.</p>
       </div>
@@ -785,16 +784,16 @@ acc.service, 'domain': get_domain(acc.service)}) %}{% endfor %}
         {% set encoded_email = email | urlencode %}
         <a href="https://www.google.com/search?q=%22{{ email }}%22" target="_blank" rel="noopener noreferrer"
           class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 transition-colors text-sm text-slate-400 hover:text-slate-200">
-          <span class="text-base">🔎</span> Google Search
+          <span class="flex items-center"><i data-lucide="search" class="w-4 h-4"></i></span> Google Search
         </a>
         <a href="https://twitter.com/search?q={{ encoded_email }}" target="_blank" rel="noopener noreferrer"
           class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 transition-colors text-sm text-slate-400 hover:text-slate-200">
-          <span class="text-base">𝕏</span> Search on X/Twitter
+          <span class="flex items-center"><i data-lucide="twitter" class="w-4 h-4"></i></span> Search on X/Twitter
         </a>
         <a href="https://www.linkedin.com/search/results/people/?keywords={{ encoded_email }}" target="_blank"
           rel="noopener noreferrer"
           class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 transition-colors text-sm text-slate-400 hover:text-slate-200">
-          <span class="text-base">💼</span> LinkedIn Search
+          <span class="flex items-center"><i data-lucide="briefcase" class="w-4 h-4"></i></span> LinkedIn Search
         </a>
       </div>
     </div>
@@ -872,18 +871,18 @@ acc.service, 'domain': get_domain(acc.service)}) %}{% endfor %}
   {# ══════════════════════════════════════════════════ #}
   <div class="glass-card p-6 mb-5 fade-in-delay-3">
     <div class="section-header mb-4">
-      <div class="section-icon bg-fuchsia-500/15 text-fuchsia-400">🌐</div>
+      <div class="section-icon bg-fuchsia-500/15 text-fuchsia-400"><i data-lucide="globe" class="w-5 h-5"></i></div>
       <h2 class="section-title">Web Mentions</h2>
       <span class="section-count">{{ dorks|length }}</span>
       <span class="text-slate-600 text-xs ml-2">via Mojeek search dorks</span>
     </div>
     {% if dorks %}
-    {% set source_icons = {'linkedin': '💼', 'github': '🐙', 'pastebin': '📋', 'reddit': '🔴', 'general': '🔎'} %}
+    {% set source_icons = {'linkedin': 'linkedin', 'github': 'github', 'pastebin': 'clipboard', 'reddit': 'message-circle', 'general': 'search'} %}
     <div class="space-y-3">
       {% for dork in dorks %}
       <a href="{{ dork.url }}" target="_blank" rel="noopener noreferrer"
         class="flex items-start gap-3 p-3 rounded-xl hover:bg-white/5 transition-colors border border-slate-800/50 hover:border-slate-700 group">
-        <span class="text-xl flex-shrink-0 mt-0.5">{{ source_icons.get(dork.source, '🔗') }}</span>
+        <span class="flex-shrink-0 mt-0.5 text-slate-400"><i data-lucide="{{ source_icons.get(dork.source, 'link') }}" class="w-5 h-5"></i></span>
         <div class="min-w-0 flex-1">
           <p class="text-slate-200 text-sm font-medium group-hover:text-indigo-300 transition-colors truncate">{{
             dork.title }}</p>
@@ -896,7 +895,7 @@ acc.service, 'domain': get_domain(acc.service)}) %}{% endfor %}
     </div>
     {% else %}
     <div class="text-center py-8">
-      <div class="text-4xl mb-3">🔇</div>
+      <div class="mb-3 text-slate-500"><i data-lucide="volume-x" class="w-10 h-10 mx-auto"></i></div>
       <p class="text-slate-500 font-semibold text-sm">No public web mentions found</p>
       <p class="text-slate-600 text-xs mt-1">This email did not appear in public search results for the checked
         platforms.</p>

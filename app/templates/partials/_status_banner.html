@@ -30,9 +30,9 @@
 
     <!-- Module progress indicators -->
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 w-full max-w-lg mt-2">
-      {% for module, icon in [('Holehe', '🌐'), ('Breaches', '🔓'), ('WHOIS/DNS', '🔍'), ('Gravatar', '👤')] %}
+      {% for module, icon in [('Holehe', 'globe'), ('Breaches', 'unlock'), ('WHOIS/DNS', 'search'), ('Gravatar', 'user')] %}
       <div class="glass-card-sm p-3 flex flex-col items-center gap-1 text-center">
-        <span class="text-xl">{{ icon }}</span>
+        <span class="text-slate-400 mb-1"><i data-lucide="{{ icon }}" class="w-5 h-5 mx-auto"></i></span>
         <span class="text-slate-400 text-xs">{{ module }}</span>
         <div class="skeleton w-12 h-1.5 rounded-full mt-1"></div>
       </div>
@@ -43,7 +43,7 @@
   {% elif status == 'failed' %}
   <!-- Error state -->
   <div class="flex flex-col items-center gap-3">
-    <div class="w-14 h-14 rounded-full bg-red-500/10 flex items-center justify-center text-3xl">❌</div>
+    <div class="w-14 h-14 rounded-full bg-red-500/10 flex items-center justify-center text-red-500"><i data-lucide="x-circle" class="w-8 h-8"></i></div>
     <p class="text-red-400 font-semibold">Scan Failed</p>
     <p class="text-slate-500 text-sm">There was an error running the OSINT scan. Please try again.</p>
     <a href="/" class="btn-secondary mt-2">← Back to Search</a>

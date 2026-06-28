@@ -4,7 +4,7 @@ OSINT Runner — orchestrates all OSINT modules concurrently and assembles the f
 from __future__ import annotations
 import asyncio
 import json
-from typing import Optional
+from typing import List, Dict, Any
 
 from app import database
 from app.models import OsintResults, Experience, ExperienceEntry
@@ -54,32 +54,51 @@ async def run_osint(search_id: str, email: str) -> None:
         database.update_search(search_id, status="failed", error_message=str(exc))
         return
 
-    # Build multiple profiles list (for UI grid)
-    profiles = []
+    # Build rich profiles list for detailed UI cards
+    profiles: List[Dict[str, Any]] = []
+
+    # Gravatar
     if gravatar_result and gravatar_result.found:
         profiles.append({
             "platform": "Gravatar",
             "avatar_url": gravatar_result.avatar_url,
-            "username": gravatar_result.display_name or email.split('@')[0],
+            "name": gravatar_result.display_name or email.split('@')[0],
+            "username": gravatar_result.display_name or "",
             "url": gravatar_result.profile_url,
+            "status": "Active",
+            "details": {"type": "Profile"}
         })
 
+    # GitHub
     if github_result:
         profiles.append({
             "platform": "GitHub",
             "avatar_url": github_result.avatar_url or "",
+            "name": github_result.name or github_result.username,
             "username": github_result.username,
             "url": github_result.html_url,
+            "status": "Active",
+            "details": {
+                "followers": getattr(github_result, 'followers', None),
+                "company": getattr(github_result, 'company', None),
+                "location": getattr(github_result, 'location', None),
+            }
         })
 
-    # Add more from accounts (Holehe) — you can expand this
+    # Holehe Accounts → Rich Cards
     for acc in accounts:
         if acc.exists and acc.service:
             profiles.append({
-                "platform": acc.service,
-                "avatar_url": "",  # Add avatar_url if your account model supports it
+                "platform": acc.service.upper(),
+                "avatar_url": "",  # Can be enhanced later per-platform
+                "name": f"{acc.service} Account",
                 "username": acc.username or "",
                 "url": acc.url or "",
+                "status": "Active",
+                "details": {
+                    "type": "Registered",
+                    "category": getattr(acc, 'category', 'Other')
+                }
             })
 
     # Calculate risk
@@ -90,12 +109,12 @@ async def run_osint(search_id: str, email: str) -> None:
         has_domain_intel=bool(domain_result),
     )
 
-    # Experience
-    experience = Experience(found=bool(github_result and github_result.company), entries=[])
-    if github_result and github_result.company:
+    # Experience (LinkedIn-style)
+    experience = Experience(found=bool(github_result and getattr(github_result, 'company', None)), entries=[])
+    if github_result and getattr(github_result, 'company', None):
         experience.entries.append(ExperienceEntry(
             company=github_result.company,
-            role="Contributor",
+            role="Contributor / Developer",
             date_range="Present"
         ))
 
@@ -114,7 +133,7 @@ async def run_osint(search_id: str, email: str) -> None:
         risk=risk,
         dorks=dork_results,
         errors=errors,
-        profiles=profiles,          # <-- NEW: Multiple profiles for UI
+        profiles=profiles,   # Rich profiles for detailed cards
     )
 
     database.update_search(
