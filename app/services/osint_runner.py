@@ -56,9 +56,12 @@ async def run_osint(search_id: str, email: str) -> None:
 
     # Build rich profiles list for detailed UI cards
     profiles: List[Dict[str, Any]] = []
+    photos: List[Dict[str, str]] = []
 
     # Gravatar
     if gravatar_result and gravatar_result.found:
+        if gravatar_result.avatar_url:
+            photos.append({"platform": "Gravatar", "url": gravatar_result.avatar_url})
         profiles.append({
             "platform": "Gravatar",
             "avatar_url": gravatar_result.avatar_url,
@@ -71,6 +74,8 @@ async def run_osint(search_id: str, email: str) -> None:
 
     # GitHub
     if github_result:
+        if github_result.avatar_url:
+            photos.append({"platform": "GitHub", "url": github_result.avatar_url})
         profiles.append({
             "platform": "GitHub",
             "avatar_url": github_result.avatar_url or "",
@@ -85,13 +90,34 @@ async def run_osint(search_id: str, email: str) -> None:
             }
         })
 
+    # Google Ecosystem
+    if google_result and google_result.found:
+        if google_result.avatar_url:
+            photos.append({"platform": "Google", "url": google_result.avatar_url})
+        profiles.append({
+            "platform": "Google",
+            "avatar_url": google_result.avatar_url or "",
+            "name": "Google Account",
+            "username": email.split('@')[0],
+            "url": "",
+            "status": "Active",
+            "details": {
+                "type": "Registered",
+                "local_guide": "Yes" if getattr(google_result, 'local_guide', False) else "No",
+                "apps": str(len(google_result.active_apps)) + " Active Apps" if google_result.active_apps else "None"
+            }
+        })
+
     # Holehe Accounts → Rich Cards
     for acc in accounts:
         if acc.exists and acc.service:
+            domain = f"{acc.service}.com" if not "." in acc.service else acc.service
+            favicon_url = f"https://www.google.com/s2/favicons?domain={domain}&sz=128"
+            photos.append({"platform": acc.service.title(), "url": favicon_url})
             profiles.append({
-                "platform": acc.service.upper(),
-                "avatar_url": "",  # Can be enhanced later per-platform
-                "name": f"{acc.service} Account",
+                "platform": acc.service.title(),
+                "avatar_url": favicon_url,
+                "name": f"{acc.service.title()} Account",
                 "username": acc.username or "",
                 "url": acc.url or "",
                 "status": "Active",
@@ -133,6 +159,7 @@ async def run_osint(search_id: str, email: str) -> None:
         risk=risk,
         dorks=dork_results,
         errors=errors,
+        photos=photos,
         profiles=profiles,   # Rich profiles for detailed cards
     )
 

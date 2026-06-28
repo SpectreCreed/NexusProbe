@@ -86,6 +86,8 @@ class GoogleReview(BaseModel):
 class GoogleEcosystem(BaseModel):
     found: bool = False
     user_id: Optional[str] = None
+    avatar_url: Optional[str] = None
+    local_guide: bool = False
     active_apps: List[str] = []
     maps_reviews: List[GoogleReview] = []
 
@@ -131,6 +133,8 @@ class OsintResults(BaseModel):
     risk: Optional[RiskScore] = None
     dorks: Optional[List[DorkResult]] = []       # Phase 2: web mention results
     errors: Dict[str, str] = {}
+    photos: List[Dict[str, str]] = []
+    profiles: List[Dict[str, Any]] = []
 
 
 class SearchRecord(BaseModel):

@@ -44,14 +44,12 @@ async def fetch_gravatar(email: str) -> GravatarResult:
                 found=True,
                 avatar_url=avatar_url,
                 display_name=display_name,
-                profile_url=profile_link,
-                email=email
+                profile_url=profile_link
             )
 
     except Exception as exc:
         print(f"[Gravatar] Error for {email}: {exc}")
         return GravatarResult(
             found=True,
-            avatar_url=avatar_url,
-            email=email
+            avatar_url=avatar_url
         )
