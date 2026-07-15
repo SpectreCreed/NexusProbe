@@ -90,19 +90,31 @@ export default function DashboardClient({ searchId }: { searchId: string }) {
                 {google_data.user_id && <Badge variant="secondary" className="text-xs font-mono">{google_data.user_id}</Badge>}
                 {google_data.local_guide && <Badge className="bg-yellow-500 hover:bg-yellow-600 text-black text-xs"><Star className="w-3 h-3 mr-1 fill-black" /> Local Guide</Badge>}
               </div>
+              {google_data.user_id && (
+                <a
+                  href={`https://www.google.com/maps/contrib/${google_data.user_id}/reviews`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-red-500/80 hover:text-red-500 underline-offset-2 hover:underline mt-1 inline-block"
+                >
+                  View Maps Profile
+                </a>
+              )}
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {google_data.active_apps?.length > 0 && (
             <Card>
               <CardHeader><CardTitle className="text-lg">Active Apps</CardTitle></CardHeader>
               <CardContent>
                 <div className="flex flex-wrap gap-2">
-                  {google_data.active_apps?.map((app: string) => (
+                  {google_data.active_apps.map((app: string) => (
                     <Badge key={app} variant="outline" className="text-sm bg-red-500/10 text-red-500 border-red-500/20">{app}</Badge>
                   ))}
                 </div>
               </CardContent>
             </Card>
+            )}
             {google_data.maps_reviews?.length > 0 && (
               <Card>
                 <CardHeader><CardTitle className="text-lg">Maps Reviews</CardTitle></CardHeader>
@@ -111,9 +123,13 @@ export default function DashboardClient({ searchId }: { searchId: string }) {
                     <div key={idx} className="bg-muted p-3 rounded-lg text-sm">
                       <div className="flex items-center justify-between font-semibold mb-1">
                         <span className="flex items-center gap-1"><MapPin className="w-3 h-3" /> {rev.location}</span>
-                        <span className="text-yellow-500 flex items-center gap-1"><Star className="w-3 h-3 fill-yellow-500" /> {rev.rating}</span>
+                        {rev.rating != null && (
+                          <span className="text-yellow-500 flex items-center gap-1"><Star className="w-3 h-3 fill-yellow-500" /> {rev.rating}</span>
+                        )}
                       </div>
-                      <p className="text-muted-foreground italic">&quot;{rev.comment}&quot;</p>
+                      {rev.comment && (
+                        <p className="text-muted-foreground italic">&quot;{rev.comment}&quot;</p>
+                      )}
                       {rev.date && <p className="text-xs text-muted-foreground mt-2">{rev.date}</p>}
                     </div>
                   ))}
@@ -121,6 +137,11 @@ export default function DashboardClient({ searchId }: { searchId: string }) {
               </Card>
             )}
           </div>
+          {!google_data.active_apps?.length && !google_data.maps_reviews?.length && (
+            <p className="text-muted-foreground text-sm">
+              Google account confirmed. No public Maps activity found.
+            </p>
+          )}
         </div>
       )}
 

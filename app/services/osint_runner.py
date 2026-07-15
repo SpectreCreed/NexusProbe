@@ -7,7 +7,7 @@ import json
 from typing import List, Dict, Any
 
 from app import database
-from app.models import OsintResults, Experience, ExperienceEntry
+from app.models import OsintResults, Experience, ExperienceEntry, GoogleEcosystem
 from app.services.gravatar_service import fetch_gravatar
 from app.services.xposedornot_service import fetch_breaches
 from app.services.domain_service import fetch_domain_intel
@@ -16,6 +16,33 @@ from app.services.risk_scoring import calculate_risk
 from app.services.dork_service import fetch_dork_results
 from app.services.github_service import fetch_github_profile
 from app.services.google_service import fetch_google_ecosystem
+
+
+def _holehe_found_google(accounts) -> bool:
+    for acc in accounts:
+        if not acc.exists:
+            continue
+        key = acc.service.lower().replace(".com", "")
+        if key == "google":
+            return True
+    return False
+
+
+def _has_google_profile_data(google_result: GoogleEcosystem) -> bool:
+    return bool(
+        google_result.user_id
+        or google_result.avatar_url
+        or google_result.maps_reviews
+        or google_result.local_guide
+    )
+
+
+def _resolve_google_result(google_result, accounts):
+    if google_result and google_result.found:
+        return google_result
+    if _holehe_found_google(accounts):
+        return GoogleEcosystem(found=True)
+    return google_result or GoogleEcosystem(found=False)
 
 
 async def run_osint(search_id: str, email: str) -> None:
@@ -49,6 +76,11 @@ async def run_osint(search_id: str, email: str) -> None:
         if xon_error:
             errors["xon"] = str(xon_error)
 
+        if google_error:
+            errors["google"] = str(google_error)
+
+        google_result = _resolve_google_result(google_result, accounts)
+
     except Exception as exc:
         print(f"[Runner] Fatal error for {email}: {exc}")
         database.update_search(search_id, status="failed", error_message=str(exc))
@@ -72,8 +104,8 @@ async def run_osint(search_id: str, email: str) -> None:
             "details": {"type": "Profile"}
         })
 
-    # GitHub
-    if github_result:
+    # GitHub — GitHubProfile is always truthy; gate on .found
+    if github_result and github_result.found:
         if github_result.avatar_url:
             photos.append({"platform": "GitHub", "url": github_result.avatar_url})
         profiles.append({
@@ -90,27 +122,35 @@ async def run_osint(search_id: str, email: str) -> None:
             }
         })
 
-    # Google Ecosystem
-    if google_result and google_result.found:
+    # Google Ecosystem — only surface a profile card when we have real public data
+    if google_result and google_result.found and _has_google_profile_data(google_result):
         if google_result.avatar_url:
             photos.append({"platform": "Google", "url": google_result.avatar_url})
+        maps_url = (
+            f"https://www.google.com/maps/contrib/{google_result.user_id}/reviews"
+            if google_result.user_id else ""
+        )
+        google_details: Dict[str, Any] = {
+            "type": "Public Profile" if google_result.user_id else "Registered",
+            "local_guide": "Yes" if google_result.local_guide else "No",
+        }
+        if google_result.maps_reviews:
+            google_details["reviews"] = f"{len(google_result.maps_reviews)} Maps Reviews"
         profiles.append({
             "platform": "Google",
             "avatar_url": google_result.avatar_url or "",
             "name": "Google Account",
             "username": email.split('@')[0],
-            "url": "",
+            "url": maps_url,
             "status": "Active",
-            "details": {
-                "type": "Registered",
-                "local_guide": "Yes" if getattr(google_result, 'local_guide', False) else "No",
-                "apps": str(len(google_result.active_apps)) + " Active Apps" if google_result.active_apps else "None"
-            }
+            "details": google_details,
         })
 
     # Holehe Accounts → Rich Cards
     for acc in accounts:
         if acc.exists and acc.service:
+            if google_result and google_result.found and acc.service.lower().replace(".com", "") == "google":
+                continue
             domain = f"{acc.service}.com" if not "." in acc.service else acc.service
             favicon_url = f"https://www.google.com/s2/favicons?domain={domain}&sz=128"
             photos.append({"platform": acc.service.title(), "url": favicon_url})

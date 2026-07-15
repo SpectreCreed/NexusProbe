@@ -70,6 +70,8 @@
 
 {# Collect all profile avatars #}
 {% set all_avatars = [] %}
+{% if google_data.get('found') and google_data.get('avatar_url') %}{% set _ = all_avatars.append({'url': google_data.avatar_url,
+'service': 'google', 'domain': 'google.com'}) %}{% endif %}
 {% if github.get('found') and github.get('avatar_url') %}{% set _ = all_avatars.append({'url': github.avatar_url,
 'service': 'github', 'domain': 'github.com'}) %}{% endif %}
 {% if gravatar.get('found') and gravatar.get('avatar_url') %}{% set _ = all_avatars.append({'url': gravatar.avatar_url,
@@ -574,8 +576,46 @@ acc.service, 'domain': get_domain(acc.service)}) %}{% endfor %}
   <div class="glass-card p-6 mb-5 fade-in-delay-3">
     <div class="section-header mb-4">
       <div class="section-icon bg-red-500/15 text-red-400">G</div>
-      <h2 class="section-title">Google Activity</h2>
+      <h2 class="section-title">Google Profile</h2>
+      {% if google_data.get('local_guide') %}
+      <span class="badge badge-amber ml-auto">Local Guide</span>
+      {% endif %}
     </div>
+
+    <div class="service-profile-row mb-4">
+      {% if google_data.get('avatar_url') %}
+      <img class="service-avatar" src="{{ google_data.avatar_url }}" alt="Google profile" />
+      {% else %}
+      <div class="service-avatar-placeholder">G</div>
+      {% endif %}
+      <div>
+        <p class="service-profile-name">Google Account</p>
+        <p class="service-profile-sub">{{ email }}</p>
+        {% if google_data.get('user_id') %}
+        <a href="https://www.google.com/maps/contrib/{{ google_data.user_id }}/reviews" target="_blank"
+          rel="noopener noreferrer" class="service-view-link">
+          View Maps Profile
+          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+          </svg>
+        </a>
+        {% endif %}
+      </div>
+    </div>
+
+    {% if google_data.get('user_id') %}
+    <div class="service-meta-grid mb-4">
+      <div class="service-meta-row">
+        <span class="service-meta-label">Gaia ID</span>
+        <span class="service-meta-value font-mono text-xs">{{ google_data.user_id }}</span>
+      </div>
+      <div class="service-meta-row">
+        <span class="service-meta-label">Local Guide</span>
+        <span class="service-meta-value">{{ 'Yes' if google_data.get('local_guide') else 'No' }}</span>
+      </div>
+    </div>
+    {% endif %}
 
     {% if google_data.get('active_apps') %}
     <p class="text-slate-500 text-xs uppercase tracking-wider font-semibold mb-2">Active Apps</p>
@@ -605,6 +645,10 @@ acc.service, 'domain': get_domain(acc.service)}) %}{% endfor %}
       </div>
       {% endfor %}
     </div>
+    {% endif %}
+
+    {% if not google_data.get('active_apps') and not google_data.get('maps_reviews') %}
+    <p class="text-slate-500 text-sm">Google account confirmed. No public Maps activity found.</p>
     {% endif %}
   </div>
   {% endif %}
