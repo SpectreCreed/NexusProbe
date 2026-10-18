@@ -68,23 +68,28 @@
 {% set dorks = results.get('dorks', []) %}
 {% set found_accounts = accounts | selectattr('exists') | list %}
 
-{# Collect all profile avatars #}
+{# Collect profile photos — prefer backend real_photos (genuine person photos, no silhouettes) #}
+{% set real_photos_backend = results.get('real_photos', []) %}
 {% set all_avatars = [] %}
-{% if google_data.get('found') and google_data.get('avatar_url') %}{% set _ = all_avatars.append({'url': google_data.avatar_url,
-'service': 'google', 'domain': 'google.com'}) %}{% endif %}
-{% if github.get('found') and github.get('avatar_url') %}{% set _ = all_avatars.append({'url': github.avatar_url,
-'service': 'github', 'domain': 'github.com'}) %}{% endif %}
-{% if gravatar.get('found') and gravatar.get('avatar_url') %}{% set _ = all_avatars.append({'url': gravatar.avatar_url,
-'service': 'gravatar', 'domain': 'gravatar.com'}) %}{% endif %}
+{% if real_photos_backend %}
+  {% for photo in real_photos_backend %}
+    {% set _ = all_avatars.append({'url': photo.url, 'service': photo.platform | lower, 'domain': photo.platform | lower ~ '.com'}) %}
+  {% endfor %}
+{% else %}
+  {# Fallback: build manually, but only include Gravatar if it has a real custom photo #}
+  {% if google_data.get('found') and google_data.get('avatar_url') %}{% set _ = all_avatars.append({'url': google_data.avatar_url, 'service': 'google', 'domain': 'google.com'}) %}{% endif %}
+  {% if github.get('found') and github.get('avatar_url') %}{% set _ = all_avatars.append({'url': github.avatar_url, 'service': 'github', 'domain': 'github.com'}) %}{% endif %}
+  {% if gravatar.get('found') and gravatar.get('has_custom_avatar') and gravatar.get('avatar_url') %}{% set _ = all_avatars.append({'url': gravatar.avatar_url, 'service': 'gravatar', 'domain': 'gravatar.com'}) %}{% endif %}
+{% endif %}
 
 {# Collect all profile links #}
 {% set all_links = [] %}
-{% if github.get('found') and github.get('html_url') %}{% set _ = all_links.append({'url': github.html_url, 'service':
-'GitHub', 'domain': 'github.com'}) %}{% endif %}
+{% if github.get('found') and github.get('html_url') %}{% set _ = all_links.append({'url': github.html_url, 'service': 'GitHub', 'domain': 'github.com'}) %}{% endif %}
 {% if gravatar.get('found') and gravatar.get('profile_url') %}{% set _ = all_links.append({'url': gravatar.profile_url,
 'service': 'Gravatar', 'domain': 'gravatar.com'}) %}{% endif %}
 {% for acc in found_accounts if acc.get('url') %}{% set _ = all_links.append({'url': acc.url, 'service': acc.service,
 'domain': get_domain(acc.service)}) %}{% endfor %}
+
 
 {# Collect all dates #}
 {% set all_dates = [] %}

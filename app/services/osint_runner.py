@@ -88,10 +88,17 @@ async def run_osint(search_id: str, email: str) -> None:
 
     # Build rich profiles list for detailed UI cards
     profiles: List[Dict[str, Any]] = []
+    # real_photos: genuine person avatars shown in the top photo grid
+    real_photos: List[Dict[str, str]] = []
+    # photos: all platform images including favicons (for account card avatars)
     photos: List[Dict[str, str]] = []
 
     # Gravatar
     if gravatar_result and gravatar_result.found:
+        # Only add to real_photos grid when a genuine custom photo was found
+        if gravatar_result.has_custom_avatar and gravatar_result.avatar_url:
+            real_photos.append({"platform": "Gravatar", "url": gravatar_result.avatar_url})
+        # Always add to photos so account cards can use it
         if gravatar_result.avatar_url:
             photos.append({"platform": "Gravatar", "url": gravatar_result.avatar_url})
         profiles.append({
@@ -107,6 +114,8 @@ async def run_osint(search_id: str, email: str) -> None:
     # GitHub — GitHubProfile is always truthy; gate on .found
     if github_result and github_result.found:
         if github_result.avatar_url:
+            # GitHub avatar is always a real photo
+            real_photos.append({"platform": "GitHub", "url": github_result.avatar_url})
             photos.append({"platform": "GitHub", "url": github_result.avatar_url})
         profiles.append({
             "platform": "GitHub",
@@ -119,12 +128,17 @@ async def run_osint(search_id: str, email: str) -> None:
                 "followers": getattr(github_result, 'followers', None),
                 "company": getattr(github_result, 'company', None),
                 "location": getattr(github_result, 'location', None),
+                "public_repos": getattr(github_result, 'public_repos', None),
+                "bio": getattr(github_result, 'bio', None),
+                "blog": getattr(github_result, 'blog', None),
+                "created_at": getattr(github_result, 'created_at', None),
             }
         })
 
     # Google Ecosystem — only surface a profile card when we have real public data
     if google_result and google_result.found and _has_google_profile_data(google_result):
         if google_result.avatar_url:
+            real_photos.append({"platform": "Google", "url": google_result.avatar_url})
             photos.append({"platform": "Google", "url": google_result.avatar_url})
         maps_url = (
             f"https://www.google.com/maps/contrib/{google_result.user_id}/reviews"
@@ -146,12 +160,12 @@ async def run_osint(search_id: str, email: str) -> None:
             "details": google_details,
         })
 
-    # Holehe Accounts → Rich Cards
+    # Holehe Accounts → Rich Cards (favicon only — not added to real_photos grid)
     for acc in accounts:
         if acc.exists and acc.service:
             if google_result and google_result.found and acc.service.lower().replace(".com", "") == "google":
                 continue
-            domain = f"{acc.service}.com" if not "." in acc.service else acc.service
+            domain = f"{acc.service}.com" if "." not in acc.service else acc.service
             favicon_url = f"https://www.google.com/s2/favicons?domain={domain}&sz=128"
             photos.append({"platform": acc.service.title(), "url": favicon_url})
             profiles.append({
@@ -199,12 +213,13 @@ async def run_osint(search_id: str, email: str) -> None:
         risk=risk,
         dorks=dork_results,
         errors=errors,
-        photos=photos,
-        profiles=profiles,   # Rich profiles for detailed cards
+        real_photos=real_photos,   # Genuine person photos for the photos grid
+        photos=photos,             # All platform images (includes favicons)
+        profiles=profiles,         # Rich profiles for detailed cards
     )
 
     database.update_search(
         search_id,
         status="completed",
         results=json.loads(results.model_dump_json()),
-    )
+    )

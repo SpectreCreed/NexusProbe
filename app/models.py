@@ -133,8 +133,12 @@ class OsintResults(BaseModel):
     risk: Optional[RiskScore] = None
     dorks: Optional[List[DorkResult]] = []       # Phase 2: web mention results
     errors: Dict[str, str] = {}
+    # real_photos: only genuine person photos (Gravatar custom, GitHub, Google avatars)
+    real_photos: List[Dict[str, str]] = []
+    # photos: all platform images including favicons (for account cards)
     photos: List[Dict[str, str]] = []
     profiles: List[Dict[str, Any]] = []
+
 
 
 class SearchRecord(BaseModel):
