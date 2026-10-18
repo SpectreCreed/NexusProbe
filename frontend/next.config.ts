@@ -1,13 +1,15 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  async rewrites() {
-    return [
-      {
-        source: "/api/v1/:path*",
-        destination: "http://127.0.0.1:8000/api/v1/:path*",
-      },
-    ];
+  images: {
+    remotePatterns: [
+      { protocol: "https", hostname: "www.gravatar.com" },
+      { protocol: "https", hostname: "secure.gravatar.com" },
+      { protocol: "https", hostname: "avatars.githubusercontent.com" },
+      { protocol: "https", hostname: "github.com" },
+      { protocol: "https", hostname: "lh3.googleusercontent.com" },
+      { protocol: "https", hostname: "unavatar.io" },
+    ],
   },
 };
 

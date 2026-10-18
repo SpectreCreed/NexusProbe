@@ -198,6 +198,17 @@ async def run_osint(search_id: str, email: str) -> None:
             date_range="Present"
         ))
 
+    # Primary avatar resolution: real_photos first, then fallback to gravatar / google / github
+    primary_avatar = None
+    if real_photos:
+        primary_avatar = real_photos[0].get("url")
+    elif google_result and getattr(google_result, "avatar_url", None):
+        primary_avatar = google_result.avatar_url
+    elif github_result and getattr(github_result, "avatar_url", None):
+        primary_avatar = github_result.avatar_url
+    elif gravatar_result and getattr(gravatar_result, "avatar_url", None):
+        primary_avatar = gravatar_result.avatar_url
+
     # Full results
     results = OsintResults(
         email=email,
@@ -216,6 +227,7 @@ async def run_osint(search_id: str, email: str) -> None:
         real_photos=real_photos,   # Genuine person photos for the photos grid
         photos=photos,             # All platform images (includes favicons)
         profiles=profiles,         # Rich profiles for detailed cards
+        primary_avatar=primary_avatar,
     )
 
     database.update_search(

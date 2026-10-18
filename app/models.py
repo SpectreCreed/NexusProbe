@@ -138,6 +138,7 @@ class OsintResults(BaseModel):
     # photos: all platform images including favicons (for account cards)
     photos: List[Dict[str, str]] = []
     profiles: List[Dict[str, Any]] = []
+    primary_avatar: Optional[str] = None
 
 
 

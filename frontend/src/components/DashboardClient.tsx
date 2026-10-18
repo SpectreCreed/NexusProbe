@@ -96,8 +96,13 @@ function DashboardSkeleton({ email }: { email?: string }) {
           <div className="flex flex-col md:flex-row gap-8 items-center md:items-start">
             <Skeleton className="w-36 h-36 rounded-full" />
             <div className="flex-1 space-y-3 w-full">
-              <Skeleton className="h-6 w-64" />
-              <Skeleton className="h-4 w-40" />
+              <div className="flex flex-col sm:flex-row items-center gap-4">
+                <Skeleton className="h-20 w-20 rounded-full shrink-0" />
+                <div className="space-y-2">
+                  <Skeleton className="h-4 w-24" />
+                  <Skeleton className="h-6 w-64" />
+                </div>
+              </div>
               <div className="flex gap-4 pt-2">
                 <Skeleton className="h-16 w-28 rounded-xl" />
                 <Skeleton className="h-16 w-28 rounded-xl" />
@@ -217,6 +222,15 @@ export default function DashboardClient({ searchId }: { searchId: string }) {
   const foundAccountCount = profiles.length;
   const breachCount = breaches.length;
 
+  // Resolve the best available profile image from the scan result
+  const avatarUrl =
+    data?.primary_avatar ||
+    data?.google?.avatar_url ||
+    data?.google_data?.avatar_url ||
+    data?.github?.avatar_url ||
+    data?.gravatar?.avatar_url ||
+    null;
+
   return (
     <div className="max-w-6xl mx-auto p-4 md:p-8 space-y-10">
 
@@ -240,11 +254,30 @@ export default function DashboardClient({ searchId }: { searchId: string }) {
 
             {/* Email + Stats */}
             <div className="flex-1 space-y-4 text-center md:text-left">
-              <div>
-                <p className="text-xs text-muted-foreground uppercase tracking-widest mb-1">Investigating</p>
-                <h1 className="text-2xl md:text-3xl font-black tracking-tight font-mono text-slate-100 break-all">
-                  {data.email}
-                </h1>
+              <div className="flex flex-col sm:flex-row items-center gap-4">
+                {avatarUrl ? (
+                  <img
+                    src={avatarUrl}
+                    alt={`${data?.email || "Target"} profile`}
+                    referrerPolicy="no-referrer"
+                    crossOrigin="anonymous"
+                    className="h-20 w-20 rounded-full object-cover border-2 border-cyan-500/40 shadow-md shrink-0"
+                    onError={(e) => {
+                      // Fallback if the image URL expires or blocks hotlinking
+                      e.currentTarget.style.display = "none";
+                    }}
+                  />
+                ) : (
+                  <div className="h-20 w-20 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 font-bold text-xl border border-slate-700 shrink-0">
+                    {data?.email?.[0]?.toUpperCase() || "?"}
+                  </div>
+                )}
+                <div>
+                  <p className="text-xs text-muted-foreground uppercase tracking-widest mb-1">Investigating</p>
+                  <h1 className="text-2xl md:text-3xl font-black tracking-tight font-mono text-slate-100 break-all">
+                    {data.email}
+                  </h1>
+                </div>
               </div>
               <div className="flex flex-wrap gap-3 justify-center md:justify-start">
                 <StatPill
